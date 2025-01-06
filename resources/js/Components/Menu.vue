@@ -1,31 +1,57 @@
 <template>
-    <v-app theme="dark">
         <v-navigation-drawer v-model="IsDrawerOpen">
             <!-- Conteúdo da sidebar -->
             <v-list>
-                <v-list-subheader>Menu</v-list-subheader>
-                <v-list-item prepend-icon="mdi-home">Home</v-list-item>
-                <v-list-item prepend-icon="mdi-account">Pessoas</v-list-item>
+                <v-list-subheader class="text-h6">CadImob</v-list-subheader>
+                <Link :href="route('home')">
+                    <v-list-item prepend-icon="mdi-home">Home</v-list-item>
+                </Link>
+                <Link :href="route('pessoas.index')"> 
+                    <v-list-item prepend-icon="mdi-folder-account-outline">Pessoas</v-list-item>
+                 </Link> 
                 <v-list-item prepend-icon="mdi-office-building">Imóveis</v-list-item>
+                <v-list-item prepend-icon="mdi-account-box">Usuários</v-list-item>
                 <v-list-item prepend-icon="mdi-cog">Configurações</v-list-item>
             </v-list>
+
         </v-navigation-drawer>
-
-        <v-app-bar flat class="border-b">
-            <v-app-bar-nav-icon @click="IsDrawerOpen = !IsDrawerOpen"></v-app-bar-nav-icon>
-            <v-app-bar-title></v-app-bar-title>
-
+            <v-app-bar flat class="border-b">
+                <v-app-bar-nav-icon                 @click="IsDrawerOpen = !IsDrawerOpen"></v-app-bar-nav-icon>
+            <v-app-bar-title>Teste</v-app-bar-title>
+            
             <template #append>
-                <v-avatar>
-                    <v-img cover src="https://cdn-icons-png.flaticon.com/512/2706/2706962.png"></v-img>
-                </v-avatar>
+                <v-menu>
+                    <template #activator="{ props }">
+                        <v-avatar v-bind="props">
+                            <v-img cover src="https://cdn-icons-png.flaticon.com/512/149/149071.png"></v-img>
+                        </v-avatar>
+                    </template>
+                    <!-- Conteúdo do Menu Dropdown -->
+                    <v-card min-width="150px">
+                        <v-list :lines="false" density="compact" nav>
+                            <v-list-item prepend-icon="mdi-logout">
+                                <v-list-item-title>Sair</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
             </template>
         </v-app-bar>
-    </v-app>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script>
 
-const IsDrawerOpen = ref(false);
+import { Link } from "@inertiajs/vue3";
+
+export default {
+    name: 'Menu',
+    components:{
+        Link
+    },
+    data(){
+        return{
+            IsDrawerOpen: false
+        }
+    }
+}
 </script>
