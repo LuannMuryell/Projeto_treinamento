@@ -6,21 +6,22 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import '@mdi/font/css/materialdesignicons.css'
+import { md1 } from 'vuetify/blueprints'
 
-import 'vuetify/styles';
-import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
-import '@mdi/font/css/materialdesignicons.css';
-import { md1 } from 'vuetify/blueprints';
+
+const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 const vuetify = createVuetify({
     components,
     directives,
     blueprint: md1,
   })
-
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+  
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

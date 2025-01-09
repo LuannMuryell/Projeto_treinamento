@@ -11,6 +11,7 @@ const form = useForm({
     email: '',
     password: '',
     password_confirmation: '',
+    cpf: ''
 });
 
 const submit = () => {
@@ -26,7 +27,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Nome" />
 
                 <TextInput
                     id="name"
@@ -42,7 +43,22 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="cpf" value="CPF" />
+
+                <TextInput
+                    id="cpf"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.cpf"
+                    required
+                    autocomplete="off"
+                />
+
+                <InputError class="mt-2" :message="form.errors.cpf" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="email" value="E-mail" />
 
                 <TextInput
                     id="email"
@@ -50,14 +66,14 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.email"
                     required
-                    autocomplete="username"
+                    autocomplete="email"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Senha" />
 
                 <TextInput
                     id="password"
@@ -74,7 +90,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Confirmar Senha"
                 />
 
                 <TextInput

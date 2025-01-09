@@ -1,4 +1,5 @@
 <template>
+    <Head title="Pessoas"/>
     <v-app>
         <Menu />
             <v-main class="bg-grey-lighten-4 mt-8">
@@ -18,20 +19,20 @@
                                     <th>Id</th>
                                     <th>Nome</th>
                                     <th>CPF</th>
-                                    <th>Data de Nascimento</th>
+                                    <th>Data Nasc.</th>
                                     <th>Sexo</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>#1</td>
-                                    <td>Luann</td>
-                                    <td>048.277.480-04</td>
-                                    <td>18/12/2002</td>
-                                    <td>Masculino</td>
+                                <tr v-for="person in people" :key="person.id">
+                                    <td>{{ person.id }}</td>
+                                    <td>{{ person.name }}</td>
+                                    <td>{{ person.cpf }}</td>
+                                    <td>{{ person.birth_date }}</td>
+                                    <td>{{ person.gender }}</td>
                                     <td class="d-flex align-center ga-2">
-                                        <v-btn rounded="xs" small color="blue" prepend-icon="mdi-pencil" variant="tonal">Editar</v-btn>
+                                        <v-btn rounded="xs" small color="blue" prepend-icon="mdi-pencil" variant="tonal">Visualizar</v-btn>
                                         <v-btn rounded="xs" small color="blue" prepend-icon="mdi-delete" variant="tonal">Excluir</v-btn>
                                     </td>
                                 </tr>
@@ -45,13 +46,17 @@
 
 <script>
 import Menu from '../../Components/Menu.vue'
-import { Link } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 
 export default {
     name: 'People',
     components: {
         Menu,
-        Link
+        Link,
+        Head
+    },
+    props:{
+        people: Array
     }
 }
 </script>

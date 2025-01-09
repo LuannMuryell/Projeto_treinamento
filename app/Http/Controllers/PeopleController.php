@@ -8,7 +8,7 @@ class PeopleController extends Controller
 {
     public function index(){
         $people = People::all();
-        return Inertia::render('People/People');
+        return Inertia::render('People/People', ['people' => $people]);
     }
 
     public function create(){

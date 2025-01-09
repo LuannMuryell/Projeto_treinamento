@@ -1,4 +1,5 @@
 <template>
+    <Head title="Cadastro" />
     <v-app>
         <Menu />
     </v-app>
@@ -7,11 +8,14 @@
 
 <script>
 import Menu from '../../Components/Menu.vue'
+import { Head, Link } from "@inertiajs/vue3";
 
 export default {
     name: 'RegisterPeople',
     components: {
-        Menu
+        Menu,
+        Link,
+        Head
     }
 }
 
