@@ -16,22 +16,22 @@
                         <v-data-table>
                             <thead>
                                 <tr>
-                                    <th>Id</th>
-                                    <th>Nome</th>
-                                    <th>CPF</th>
-                                    <th>Data Nasc.</th>
-                                    <th>Sexo</th>
-                                    <th>Ações</th>
+                                    <th class="text-center">Id</th>
+                                    <th class="text-center">Nome</th>
+                                    <th class="text-center">CPF</th>
+                                    <th class="text-center">Data Nasc.</th>
+                                    <th class="text-center">Sexo</th>
+                                    <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="person in people" :key="person.id">
-                                    <td>{{ person.id }}</td>
-                                    <td>{{ person.name }}</td>
-                                    <td>{{ person.cpf }}</td>
-                                    <td>{{ person.birth_date }}</td>
-                                    <td>{{ person.gender }}</td>
-                                    <td class="d-flex align-center ga-2">
+                                    <td class="text-center">{{ person.id }}</td>
+                                    <td class="text-center">{{ person.name }}</td>
+                                    <td class="text-center">{{ person.cpf }}</td>
+                                    <td class="text-center">{{ person.birth_date }}</td>
+                                    <td class="text-center">{{ person.gender }}</td>
+                                    <td class="d-flex justify-center align-center ga-2">
                                         <v-btn rounded="xs" small color="blue" prepend-icon="mdi-pencil" variant="tonal">Visualizar</v-btn>
                                         <v-btn rounded="xs" small color="blue" prepend-icon="mdi-delete" variant="tonal">Excluir</v-btn>
                                     </td>
