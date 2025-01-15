@@ -6,10 +6,10 @@
             <v-container>
                 <v-card class="mx-auto" max-width="1400px">
                     <v-card-title class="text-h4 my-4">
-                        Cadastro de Pessoas
+                        Cadastro
                     </v-card-title>
                     <v-card-text>
-                        <form @submit.prevent="submit">
+                        <form @submit.prevent="savePeople()">
                             <v-row>
                                 <v-col>
                                     <v-text-field
@@ -32,6 +32,7 @@
                                     <v-text-field
                                         v-model="form.cpf"
                                         label="CPF:"
+                                        v-mask="'###.###.###-##'"
                                         variant="outlined"
                                     ></v-text-field>
                                 </v-col>
@@ -49,6 +50,7 @@
                                     <v-text-field
                                         v-model="form.phone"
                                         label="Telefone:"
+                                        v-mask="'(##) #####-####'"
                                         variant="outlined"
                                     ></v-text-field>
                                 </v-col>
@@ -60,13 +62,14 @@
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
-                            <v-row>
                                 <v-col>
-                                    <v-card-actions class="justify-end">
-                                        <v-btn rounded="xs" color="blue" size="large" variant="tonal" type="submit">Cadastrar</v-btn>
+                                    <v-card-actions class="justify-end ga-2">
+                                        <Link :href="route ('people.index')">
+                                            <v-btn rounded="xs" prepend-icon="mdi-arrow-left" color="light-gray" size="large" class="text-light-gray-darken-2" variant="tonal">Sair</v-btn>
+                                        </Link>
+                                            <v-btn rounded="xs" color="blue" size="large" variant="tonal" type="submit">Cadastrar</v-btn>
                                     </v-card-actions>
                                 </v-col>
-                            </v-row>
                         </form>
                     </v-card-text>
                 </v-card>
@@ -75,34 +78,45 @@
     </v-app>
 </template>
 
-<script>
-import Menu from '../../Components/Menu.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+<script setup>
 
-export default {
-    name: 'RegisterPeople',
-    components: {
-        Menu,
-        Head
-    },
-    setup() {
-        const form = useForm({
+import Menu from '../../Components/Menu.vue'
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import { useToast } from "vue-toast-notification"
+import "vue-toast-notification/dist/theme-sugar.css"
+
+const form = useForm({
             name: '',
             cpf: '',
             birth_date: '',
             gender: '',
             phone: '',
             email: ''
-        });
+        })
 
-        const submit = () => {
-            form.post(route('people.store'));
-        };
+const toast = useToast()
 
-        return {
-            form,
-            submit
-        };
-    }
-};
+const showSuccessToast = () => {
+    toast.success('Cadastro realizado com sucesso!', {
+    position: 'top-right',
+    })
+}
+
+const showErrorToast = () => {
+    toast.error('Não foi possível realizar o cadastro', {
+    position: 'top-right',
+    })
+        }
+
+const savePeople = () => {
+    form.post(route('people.store'), {
+        onSuccess: () => {
+        form.reset()
+        showSuccessToast()
+    },
+        onError: () => {
+        showErrorToast()
+        }
+    })
+}
 </script>

@@ -2,33 +2,36 @@
         <v-navigation-drawer v-model="IsDrawerOpen">
             <!-- Conteúdo da sidebar -->
             <v-list>
-                <v-list-subheader class="text-h6">CadImob</v-list-subheader>
+                <v-list-subheader class="text-h6"></v-list-subheader>
                 <Link :href="route('home')">
                     <v-list-item prepend-icon="mdi-home">Home</v-list-item>
                 </Link>
-                <Link :href="route('pessoas.index')"> 
+                <Link :href="route('people.index')"> 
                     <v-list-item prepend-icon="mdi-folder-account-outline">Pessoas</v-list-item>
                  </Link> 
                 <v-list-item prepend-icon="mdi-office-building">Imóveis</v-list-item>
                 <v-list-item prepend-icon="mdi-account-box">Usuários</v-list-item>
                 <v-list-item prepend-icon="mdi-cog">Configurações</v-list-item>
-            </v-list>
-
+                </v-list>
         </v-navigation-drawer>
+
             <v-app-bar flat class="border-b">
-                <v-app-bar-nav-icon                 @click="IsDrawerOpen = !IsDrawerOpen"></v-app-bar-nav-icon>
-            <v-app-bar-title>Teste</v-app-bar-title>
+                <v-app-bar-nav-icon @click="IsDrawerOpen = !IsDrawerOpen"></v-app-bar-nav-icon>
+            <v-app-bar-title></v-app-bar-title>
             
             <template #append>
                 <v-menu>
                     <template #activator="{ props }">
                         <v-avatar v-bind="props">
-                            <v-img cover src="https://cdn-icons-png.flaticon.com/512/149/149071.png"></v-img>
+                            <v-btn icon="mdi-account-circle" variant="tonal"></v-btn>
                         </v-avatar>
                     </template>
                     <!-- Conteúdo do Menu Dropdown -->
                     <v-card min-width="150px">
                         <v-list :lines="false" density="compact" nav>
+                            <v-list-item prepend-icon="mdi-account">
+                                <v-list-item-title>Perfil</v-list-item-title>
+                            </v-list-item>
                             <v-list-item prepend-icon="mdi-logout">
                                 <v-list-item-title>Sair</v-list-item-title>
                             </v-list-item>
