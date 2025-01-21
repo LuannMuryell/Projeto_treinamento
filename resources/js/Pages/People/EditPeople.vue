@@ -17,23 +17,30 @@
                                         label="Nome:"
                                         variant="outlined"
                                     ></v-text-field>
+                                    <span class="text-sm text-red-500">
+                                        {{ form.errors.name }}
+                                    </span>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.birth_date"
-                                        label="Data de Nascimento:"
+                                        label="Data de Nascimento:*"
                                         variant="outlined"
                                         type="date"
                                     ></v-text-field>
+                                    <span class="text-sm text-red-500">
+                                        {{ form.errors.birth_date }}
+                                    </span>
                                 </v-col>
                             </v-row>
                             <v-row>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.cpf"
-                                        label="CPF:"
+                                        label="CPF:*"
                                         v-mask="'###.###.###-##'"
                                         variant="outlined"
+                                        disabled
                                     ></v-text-field>
                                 </v-col>
                                 <v-col>
@@ -43,6 +50,9 @@
                                         variant="outlined"
                                         :items="['Masculino', 'Feminino', 'Outro']"
                                     ></v-select>
+                                    <span class="text-sm text-red-500">
+                                        {{ form.errors.birth_date }}
+                                    </span>
                                 </v-col>
                             </v-row>
                             <v-row>

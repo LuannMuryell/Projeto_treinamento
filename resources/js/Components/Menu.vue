@@ -8,8 +8,10 @@
                 </Link>
                 <Link :href="route('people.index')"> 
                     <v-list-item prepend-icon="mdi-folder-account-outline">Pessoas</v-list-item>
-                 </Link> 
+                 </Link>
+                 <Link :href="route('properties.index')"> 
                 <v-list-item prepend-icon="mdi-office-building">Imóveis</v-list-item>
+                 </Link>
                 <v-list-item prepend-icon="mdi-account-box">Usuários</v-list-item>
                 <v-list-item prepend-icon="mdi-cog">Configurações</v-list-item>
                 </v-list>
@@ -22,7 +24,7 @@
             <template #append>
                 <v-menu>
                     <template #activator="{ props }">
-                        <v-avatar v-bind="props">
+                        <v-avatar v-bind="props" class="mx-2">
                             <v-btn icon="mdi-account-circle" variant="tonal"></v-btn>
                         </v-avatar>
                     </template>

@@ -7,6 +7,9 @@
             <p>Para se dirigir à página de registro de pessoas clique 
                 <Link :href="route('people.index')" class="text-blue">aqui</Link>
             </p>
+            <p>Para ir até a página de registro de imóveis clique
+                <Link :href="route('properties.index')" class="text-blue">aqui</Link>
+            </p>
         </v-container>
     </v-app>
 </template>

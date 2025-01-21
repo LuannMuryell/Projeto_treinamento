@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+use App\Http\Requests\PeopleRequest;
 use App\Models\Person;
 use Inertia\Inertia;
 
 class PeopleController extends Controller
 {
     public function index(){
-        $people = Person::all();
+        $people = Person::paginate(10);
         return Inertia::render('People/People', ['people' => $people]);
     }
 
@@ -16,17 +16,18 @@ class PeopleController extends Controller
         return Inertia::render('People/RegisterPeople');
     }
 
-    public function store(Request $request)
+    public function store(PeopleRequest $request)
     {
-        $data = new Person;
-            $data->name = $request->name;
-            $data->cpf = $request->cpf;
-            $data->birth_date = $request->birth_date;
-            $data->gender = $request->gender;
-            $data->phone = $request->phone;
-            $data->email = $request->email;
+        $data = [
+            'name' => $request->name,
+            'cpf' => $request->cpf,
+            'birth_date' => $request->birth_date,
+            'gender' => $request->gender,
+            'phone' => $request->phone,
+            'email' => $request->email,
+        ];
 
-        $data->save();
+        Person::create($data);
     }
 
     public function edit(string $id){
@@ -36,7 +37,7 @@ class PeopleController extends Controller
         return Inertia::render('People/EditPeople', ['person' => $person]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(PeopleRequest $request, string $id)
     {
         $person = Person::find($id);
         $data = [
