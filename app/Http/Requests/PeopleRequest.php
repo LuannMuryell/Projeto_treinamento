@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
-
+use App\Rules\cpfRule;
+use App\Rules\dateRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PeopleRequest extends FormRequest
@@ -21,13 +22,30 @@ class PeopleRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+
+        $personId = $this->route('id');
+
+        $rules = [
             'name' => 'required',
-            'cpf' => 'required',
-            'birth_date' => 'required|date',
-            'gender' => 'required'
+            'birth_date' => ['required', 'date', new dateRule(18)], 
+            'gender' => 'required',
+            'phone' => ['nullable','regex:/^\(\d{2}\) \d{5}-\d{4}$/'],
+            'email' => ['nullable',
+            'email:rfc,dns',
+            'max:255',
+            'unique:people,email' . 
+            ($personId ? ",$personId" : '')] 
+            //Para ignorar na edição.
         ];
+        
+    //Regra de validação para novos cadastros de CPF
+        if(!$personId){
+            $rules['cpf'] = ['required', 'unique:people,cpf', new cpfRule];
+        }
+        
+        return $rules;
     }
+    
 
     public function messages():array
     {
@@ -36,7 +54,12 @@ class PeopleRequest extends FormRequest
             'birth_date.required' => 'Insira uma data de nascimento',
             'birth_date.date'=> 'Insira uma data de nascimento válida',
             'cpf.required' => 'Digite o CPF',
-            'gender.required' => 'Selecione o seu gênero'
+            'cpf.unique' => 'CPF já cadastrado',
+            'cpfRule' => 'CPF inválido',
+            'gender.required' => 'Selecione o seu gênero',
+            'phone.regex' => 'O número deve estar em um formato válido: (99) 99999-9999',
+            'email.email' => 'E-mail inválido',
+            'email.unique' => 'E-mail já cadastrado'
         ];
     }
 }

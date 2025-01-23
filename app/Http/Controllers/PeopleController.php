@@ -8,7 +8,7 @@ use Inertia\Inertia;
 class PeopleController extends Controller
 {
     public function index(){
-        $people = Person::paginate(10);
+        $people = Person::paginate(8);
         return Inertia::render('People/People', ['people' => $people]);
     }
 

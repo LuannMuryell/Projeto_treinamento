@@ -77,7 +77,7 @@ const formattedDate = (date) => {
     const year = date.slice(0, 4); // YYYY
     const month = date.slice(5, 7); // MM
     const day = date.slice(8, 10); // dd
-    return day + "/" + month + "/" + year; // Retorna em dd-MM-YYY
+    return day + "/" + month + "/" + year; 
 };
 
 const formattedCpf = (cpf) => {

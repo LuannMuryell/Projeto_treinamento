@@ -27,7 +27,7 @@ defineProps({
             <div class="w-full">
                 <div class="flex flex-col items-center justify-center bg-white rounded px-4 py-4">
                     <h1 class="text-h4 text-blue">Seja bem-vindo(a) ao</h1>
-                    <h1 class="text-h4 text-blue"><strong>Cadastro Imobiliário</strong></h1>
+                    <h1 class="text-h4 text-blue"><strong>CadImob</strong></h1>
                         <p class="mt-4 text-black text-justify">Este sistema permite registrar imóveis de São Leopoldo e gerenciar as informações dos respectivos proprietários de maneira <strong>simples</strong>, <strong>organizada</strong> e <strong>eficiente</strong>.</p> 
                         <p class="mt-4 text-base text-black">Para acesso, entre em contato com o administrador e solicite suas credenciais de login.</p>
                     <div class="mt-4 flex items-center justify-center">

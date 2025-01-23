@@ -3,18 +3,21 @@
         <v-navigation-drawer v-model="IsDrawerOpen">
             <!-- Conteúdo da sidebar -->
             <v-list>
-                <v-list-subheader class="text-h6"></v-list-subheader>
+                <v-list-item prepend-icon="mdi-home-city-outline" class="text-h5">
+                    CadImob
+                </v-list-item>
                 <Link :href="route('home')">
-                    <v-list-item prepend-icon="mdi-home">Home</v-list-item>
+                    <v-list-item prepend-icon="mdi-home" class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Home</v-list-item>
                 </Link>
                 <Link :href="route('people.index')">
-                    <v-list-item prepend-icon="mdi-folder-account-outline">Pessoas</v-list-item>
+                    <v-list-item prepend-icon="mdi-folder-account-outline" class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Pessoas</v-list-item>
                 </Link>
                 <Link :href="route('properties.index')">
-                    <v-list-item prepend-icon="mdi-office-building">Imóveis</v-list-item>
+                    <v-list-item prepend-icon="mdi-office-building" class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Imóveis</v-list-item>
                 </Link>
-                <v-list-item prepend-icon="mdi-account-box">Usuários</v-list-item>
-                <v-list-item prepend-icon="mdi-cog">Configurações</v-list-item>
+                <v-list-item prepend-icon="mdi-account-box" class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Usuários</v-list-item>
+                <v-list-item prepend-icon="mdi-cog" 
+                class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Configurações</v-list-item>
             </v-list>
         </v-navigation-drawer>
 
@@ -26,7 +29,7 @@
                 <v-menu>
                     <template #activator="{ props }">
                         <v-avatar v-bind="props" class="mx-2">
-                            <v-btn icon="mdi-account-circle" variant="tonal"></v-btn>
+                            <v-btn icon="mdi-account-circle" variant="tonal" class="bg-gray-200"></v-btn>
                         </v-avatar>
                     </template>
                     <!-- Conteúdo do Menu Dropdown -->

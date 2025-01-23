@@ -1,5 +1,6 @@
 <template>
     <v-app>
+        <Head title="Cadastro"/>
         <Menu />
         <v-main class="bg-grey-lighten-4 mt-8">
             <v-container>
@@ -68,14 +69,22 @@
                                         label="Telefone:"
                                         v-mask="'(##) #####-####'"
                                         variant="outlined"
+                                        @change="form.validate('phone')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('phone')" class="text-sm text-red-500">
+                                        {{ form.errors.phone }}
+                                    </span>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.email"
                                         label="E-mail:"
                                         variant="outlined"
+                                        @change="form.validate('email')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('email')" class="text-sm text-red-500">
+                                        {{ form.errors.email }}
+                                    </span>
                                 </v-col>
                             </v-row>
                                 <v-col>
@@ -97,7 +106,7 @@
 <script setup>
 
 import Menu from '../../Components/Menu.vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, Head } from '@inertiajs/vue3'
 import { useForm } from 'laravel-precognition-vue-inertia'
 import { useToast } from "vue-toast-notification"
 import "vue-toast-notification/dist/theme-sugar.css"
