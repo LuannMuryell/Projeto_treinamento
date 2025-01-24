@@ -9,7 +9,7 @@
                         Edição
                     </v-card-title>
                     <v-card-text>
-                        <form @submit.prevent="updateProperties()">
+                        <form @submit.prevent="submit">
                             <v-row>
                                 <v-col>
                                     <v-select
@@ -17,31 +17,48 @@
                                         label="Tipo:*"
                                         variant="outlined"
                                         :items="['Terreno', 'Casa', 'Apartamento']"
-                                    >
+                                        @update:model-value="HandleTipoChange">
                                     </v-select>
+                                    <span v-if="form.invalid('tipo')" class="text-sm text-red-500">
+                                        {{ form.errors.tipo }}
+                                    </span>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
-                                        v-model="form.area_terreno"
-                                        label="Área do Terreno:"
-                                        variant="outlined"
-                                    ></v-text-field>
+                                            v-model="form.area_terreno"
+                                            label="Área do Terreno: m²"
+                                            variant="outlined"
+                                            :disabled="!form.tipo || form.tipo === 'Apartamento'"
+                                            @change="form.validate('area_terreno')"
+                                        ></v-text-field>
+                                        <span v-if="form.invalid('area_terreno')" class="text-sm text-red-500">
+                                        {{ form.errors.area_terreno }}
+                                    </span>
                                 </v-col>
                             </v-row>
                             <v-row>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.area_edificacao"
-                                        label="Área da Edificação:"
+                                        label="Área da Edificação: m²"
                                         variant="outlined"
+                                        :disabled="!form.tipo || form.tipo === 'Terreno'"
+                                        @change="form.validate('area_edificacao')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('area_edificacao')" class="text-sm text-red-500">
+                                        {{ form.errors.area_edificacao }}
+                                    </span>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.logradouro"
                                         label="Logradouro:*"
                                         variant="outlined"
+                                        @change="form.validate('logradouro')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('logradouro')" class="text-sm text-red-500">
+                                        {{ form.errors.logradouro }}
+                                    </span>
                                 </v-col>
                             </v-row>
                             <v-row>
@@ -50,14 +67,22 @@
                                         v-model="form.numero"
                                         label="Número:*"
                                         variant="outlined"
+                                        @change="form.validate('numero')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('numero')" class="text-sm text-red-500">
+                                        {{ form.errors.numero }}
+                                    </span>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.bairro"
                                         label="Bairro:*"
                                         variant="outlined"
+                                        @change="form.validate('bairro')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('bairro')" class="text-sm text-red-500">
+                                        {{ form.errors.bairro }}
+                                    </span>
                                 </v-col>
                             </v-row>
                             <v-row>
@@ -66,18 +91,26 @@
                                         v-model="form.complemento"
                                         label="Complemento:"
                                         variant="outlined"
+                                        @change="form.validate('complemento')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('complemento')" class="text-sm text-red-500">
+                                        {{ form.errors.complemento }}
+                                    </span>
                                 </v-col>
                                 <v-col>
                                     <v-select
                                         v-model="form.contribuinte_id"
-                                        label="Contribuinte:*"
+                                        label="Selecione o Contribuinte:*"
                                         variant="outlined"
                                         :item-props="itemProps"
                                         :items="props.people"
                                         item-value="id"
                                         item-text="name"
+                                        @change="form.validate('contribuinte_id')"
                                     ></v-select>
+                                    <span v-if="form.invalid('contribuinte_id')" class="text-sm text-red-500">
+                                        {{ form.errors.contribuinte_id }}
+                                    </span>
                                 </v-col>
                             </v-row>
                             <v-row>
@@ -87,6 +120,7 @@
                                         label="Situação:"
                                         variant="outlined"
                                         :items="['Ativo', 'Inativo']"
+                                        readonly
                                     ></v-select>
                                 </v-col>
                                 <v-col>
@@ -111,10 +145,11 @@
 <script setup>
 
     import Menu from '../../Components/Menu.vue'
-    import { Head, Link, useForm } from '@inertiajs/vue3'
+    import { Head, Link } from '@inertiajs/vue3'
+    import { useForm } from 'laravel-precognition-vue-inertia'
     import { useToast } from "vue-toast-notification"
     import "vue-toast-notification/dist/theme-sugar.css"
-    import { defineProps } from "vue";
+    import { defineProps } from "vue"
 
     const props = defineProps({
         property: Object,
@@ -127,7 +162,7 @@
     }
 }
 
-    const form = useForm({
+    const form = useForm("put", route('properties.update', props.property.ins_municipal),{
                 tipo: props.property.tipo,
                 area_terreno: props.property.area_terreno,
                 area_edificacao: props.property.area_edificacao,
@@ -138,6 +173,19 @@
                 contribuinte_id: props.property.contribuinte_id,
                 situacao: props.property.situacao
             })
+
+    function HandleTipoChange() {
+        if (form.tipo === "Terreno") {
+            form.area_edificacao = 0;
+            form.area_terreno = '';
+        }else if(form.tipo === "Apartamento"){
+            form.area_terreno = 0; 
+            form.area_edificacao = '';
+        }else if (form.tipo === "Casa"){
+            form.area_terreno = ''; 
+            form.area_edificacao = '';
+        }
+    } 
 
     const toast = useToast()
 
@@ -153,8 +201,8 @@
         })
             }
 
-    const updateProperties = () => {
-        form.put(route('properties.update', props.property.ins_municipal), {
+    const submit = () => {
+        form.submit({
             onSuccess: () => {
             showSuccessToast()
         },

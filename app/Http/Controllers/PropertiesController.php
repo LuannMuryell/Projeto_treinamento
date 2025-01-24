@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Property;
 use App\Models\Person;
-use Illuminate\Http\Request;
+use App\Http\Requests\PropertiesRequest;
 use Inertia\Inertia;
 
 class PropertiesController extends Controller
@@ -20,7 +20,7 @@ class PropertiesController extends Controller
         return Inertia::render('Properties/RegisterProperties', ['people' => $people]);
     }
             
-    public function store(Request $request)
+    public function store(PropertiesRequest $request)
     {
         $data = [
             'tipo' => $request->tipo,
@@ -43,7 +43,7 @@ class PropertiesController extends Controller
         return Inertia::render('Properties/EditProperties', ['property' => $property, 'people' => $people]);
     }
 
-    public function update(Request $request, string $ins_municipal)
+    public function update(PropertiesRequest $request, string $ins_municipal)
     {
         $property = Property::find($ins_municipal);
         $data = [

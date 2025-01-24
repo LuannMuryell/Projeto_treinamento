@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 use App\Rules\cpfRule;
+use App\Rules\phoneRule;
 use App\Rules\dateRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -20,22 +21,23 @@ class PeopleRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
 
         $personId = $this->route('id');
 
         $rules = [
-            'name' => 'required',
+            'name' => ['required','max:255'],
             'birth_date' => ['required', 'date', new dateRule(18)], 
             'gender' => 'required',
-            'phone' => ['nullable','regex:/^\(\d{2}\) \d{5}-\d{4}$/'],
+            'phone' => ['nullable', new phoneRule],
             'email' => ['nullable',
             'email:rfc,dns',
             'max:255',
             'unique:people,email' . 
             ($personId ? ",$personId" : '')] 
-            //Para ignorar na edição.
+            // Para ignorar o mesmo e-mail na edição
         ];
         
     //Regra de validação para novos cadastros de CPF
@@ -51,16 +53,24 @@ class PeopleRequest extends FormRequest
     {
         return [
             'name.required' => 'Digite o nome',
+            'name.max' => 'O campo nome não deve exceder 255 caracteres',
             'birth_date.required' => 'Insira uma data de nascimento',
             'birth_date.date'=> 'Insira uma data de nascimento válida',
             'cpf.required' => 'Digite o CPF',
             'cpf.unique' => 'CPF já cadastrado',
-            'cpfRule' => 'CPF inválido',
             'gender.required' => 'Selecione o seu gênero',
-            'phone.regex' => 'O número deve estar em um formato válido: (99) 99999-9999',
             'email.email' => 'E-mail inválido',
-            'email.unique' => 'E-mail já cadastrado'
+            'email.unique' => 'E-mail já cadastrado',
+            'email.max' => 'O campo e-mail não deve exceder 255 caracteres'
         ];
+    }
+    // Adicionei essa função para limpar os dados no banco de dados retirando caracteres especiais
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'cpf' => preg_replace('/\D/', '', $this->cpf),
+            'phone' => preg_replace('/\D/', '', $this->phone),
+        ]);
     }
 }
 

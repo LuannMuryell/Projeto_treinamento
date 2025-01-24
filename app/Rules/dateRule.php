@@ -31,7 +31,7 @@ class DateRule implements ValidationRule
         }
 
         if ($age < $this->age) {
-            $fail("Idade mínima permitida: {$this->age} anos");
+            $fail("Idade mínima permitida: 18 anos");
         }
     }
 }

@@ -13,21 +13,20 @@ Route::get('/home', function () {
 })->name('home');
 
 // Pessoas
-
 Route::get('/pessoas', [PeopleController::class, 'index'])->name('people.index');
 Route::get('/pessoas/cadastro', [PeopleController::class, 'create'])->name('people.create');
 Route::post('/pessoas', [PeopleController::class, 'store'])->name('people.store')->middleware([HandlePrecognitiveRequests::class]);
 Route::get('/pessoas/{id}', [PeopleController::class, 'edit'])->name('people.edit');
-Route::put('/pessoas/{id}', [PeopleController::class, 'update'])->name('people.update');
-Route::delete('/pessoas/{id}', [PeopleController::class, 'destroy'])->name('people.destroy');
-// Imóveis
+Route::put('/pessoas/{id}', [PeopleController::class, 'update'])->name('people.update')->middleware([HandlePrecognitiveRequests::class]);
+Route::delete('/pessoas/{id}', [PeopleController::class, 'destroy'])->name('people.destroy')->middleware([HandlePrecognitiveRequests::class]);
 
+// Imóveis
 Route::get('/imoveis', [PropertiesController::class, 'index'])->name('properties.index');
 Route::get('/imoveis/cadastro', [PropertiesController::class, 'create'])->name('properties.create');
-Route::post('/imoveis', [PropertiesController::class, 'store'])->name('properties.store');
+Route::post('/imoveis', [PropertiesController::class, 'store'])->name('properties.store')->middleware([HandlePrecognitiveRequests::class]);
 Route::get('/imoveis/{ins_municipal}', [PropertiesController::class, 'edit'])->name('properties.edit');
-Route::put('/imoveis/{ins_municipal}', [PropertiesController::class, 'update'])->name('properties.update');
-Route::delete('/imoveis/{ins_municipal}', [PropertiesController::class, 'destroy'])->name('properties.destroy');
+Route::put('/imoveis/{ins_municipal}', [PropertiesController::class, 'update'])->name('properties.update')->middleware([HandlePrecognitiveRequests::class]);
+Route::delete('/imoveis/{ins_municipal}', [PropertiesController::class, 'destroy'])->name('properties.destroy')->middleware([HandlePrecognitiveRequests::class]);
 
 
 

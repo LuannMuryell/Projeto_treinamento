@@ -9,15 +9,17 @@
                         Edição
                     </v-card-title>
                     <v-card-text>
-                        <form @submit.prevent="updatePeople()">
+                        <form @submit.prevent="submit">
                             <v-row>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.name"
-                                        label="Nome:"
+                                        label="Nome:*"
                                         variant="outlined"
-                                    ></v-text-field>
-                                    <span class="text-sm text-red-500">
+                                        @change="form.validate('name')"
+                                    >
+                                    </v-text-field>
+                                    <span v-if="form.invalid('name')" class="text-sm text-red-500">
                                         {{ form.errors.name }}
                                     </span>
                                 </v-col>
@@ -27,8 +29,9 @@
                                         label="Data de Nascimento:*"
                                         variant="outlined"
                                         type="date"
+                                        @change="form.validate('birth_date')"
                                     ></v-text-field>
-                                    <span class="text-sm text-red-500">
+                                    <span v-if="form.invalid('birth_date')" class="text-sm text-red-500">
                                         {{ form.errors.birth_date }}
                                     </span>
                                 </v-col>
@@ -40,18 +43,23 @@
                                         label="CPF:*"
                                         v-mask="'###.###.###-##'"
                                         variant="outlined"
+                                        @change="form.validate('cpf')"
                                         disabled
                                     ></v-text-field>
+                                    <span v-if="form.invalid('cpf')" class="text-sm text-red-500">
+                                        {{ form.errors.cpf }}
+                                    </span>
                                 </v-col>
                                 <v-col>
                                     <v-select
                                         v-model="form.gender"
-                                        label="Sexo:"
+                                        label="Sexo:*"
                                         variant="outlined"
                                         :items="['Masculino', 'Feminino', 'Outro']"
+                                        @change="form.validate('gender')"
                                     ></v-select>
-                                    <span class="text-sm text-red-500">
-                                        {{ form.errors.birth_date }}
+                                    <span v-if="form.invalid('gender')" class="text-sm text-red-500">
+                                        {{ form.errors.gender }}
                                     </span>
                                 </v-col>
                             </v-row>
@@ -62,14 +70,22 @@
                                         label="Telefone:"
                                         v-mask="'(##) #####-####'"
                                         variant="outlined"
+                                        @change="form.validate('phone')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('phone')" class="text-sm text-red-500">
+                                        {{ form.errors.phone }}
+                                    </span>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.email"
                                         label="E-mail:"
                                         variant="outlined"
+                                        @change="form.validate('email')"
                                     ></v-text-field>
+                                    <span v-if="form.invalid('email')" class="text-sm text-red-500">
+                                        {{ form.errors.email }}
+                                    </span>
                                 </v-col>
                             </v-row>
                                 <v-col>
@@ -91,7 +107,8 @@
 <script setup>
 
     import Menu from '../../Components/Menu.vue'
-    import { Head, Link, useForm } from '@inertiajs/vue3'
+    import { Head, Link } from '@inertiajs/vue3'
+    import { useForm } from 'laravel-precognition-vue-inertia'
     import { useToast } from "vue-toast-notification"
     import "vue-toast-notification/dist/theme-sugar.css"
     import { defineProps } from "vue";
@@ -100,7 +117,7 @@
         person: Object
     })
 
-    const form = useForm({
+    const form = useForm("put", route('people.update', props.person.id),{
                 name: props.person.name,
                 cpf: props.person.cpf,
                 birth_date: props.person.birth_date,
@@ -123,8 +140,8 @@
         })
             }
 
-    const updatePeople = () => {
-        form.put(route('people.update', props.person.id), {
+    const submit = () => {
+        form.submit({
             onSuccess: () => {
             showSuccessToast()
         },
