@@ -4,7 +4,7 @@
         <Menu />
         <v-main class="bg-grey-lighten-4 mt-8">
             <v-container>
-                <v-card class="mx-auto" max-width="1400px">
+                <v-card class="mx-auto">
                     <v-card-title class="text-h4 my-4">
                         Cadastro
                     </v-card-title>

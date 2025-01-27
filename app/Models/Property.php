@@ -27,5 +27,10 @@ class Property extends Model
     {
         return $this->belongsTo(Person::class, 'contribuinte_id'); 
     }
+
+    public function files()
+    {
+        return $this->hasMany(File::class,'file_ins_municipal', 'ins_municipal');
+    }
 }
 

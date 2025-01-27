@@ -23,15 +23,24 @@ class PropertiesRequest extends FormRequest
     {
         $rules = [
             'tipo' => 'required',
-            'area_terreno' => [new areaRule],
-            'area_edificacao' => [new areaRule],
             'logradouro' => ['required','max:255'],
-            'numero' => ['required', 'regex:/^\d+$/', 'max:10'],
+            'numero' => ['required', 'numeric'],
             'bairro' => ['required','max:255'],
             'complemento' => ['nullable','max:255'],
             'contribuinte_id' => 'required'
         ];
 
+        $tipo = $this->input('tipo');
+
+        if($tipo === 'Terreno'){
+            $rules['area_terreno'] = ['required','numeric','min:1', new areaRule];
+        }elseif($tipo === 'Apartamento'){
+            $rules['area_edificacao'] = ['required','numeric','min:1', new areaRule]; 
+        }elseif($tipo === 'Casa'){
+            $rules['area_terreno'] = ['required','numeric','min:1', new areaRule];
+            $rules['area_edificacao'] = ['required','numeric','min:1', new areaRule]; 
+        }
+    
         return $rules;
 
     }
@@ -43,17 +52,25 @@ class PropertiesRequest extends FormRequest
             'logradouro.required' => 'Informe o logradouro',
             'logradouro.max' => 'O campo logradouro não deve exceder 255 caracteres',
             'numero.required' => 'Informe o número',
-            'numero.regex' => 'O campo número deve conter apenas números',
-            'numero.max' => 'O campo número não deve exceder 10 caracteres',
+            'numero.numeric' => 'O campo número deve conter apenas números',
             'bairro.required' => 'Informe o bairro',
             'bairro.max' => 'O campo bairro não deve exceder 255 caracteres',
             'contribuinte_id.required' => 'Selecione o contribuinte',
-            'complemento.max' => 'O campo complemento não deve exceder 255 caracteres'
+            'complemento.max' => 'O campo complemento não deve exceder 255 caracteres',
+
+            // Áreas
+            'area_terreno.numeric' => 'O campo deve ser um número',
+            'area_terreno.required' => 'Informe a área do terreno',
+            'area_terreno.min' => 'A área do terreno deve ser maior que zero',
+            'area_edificacao.numeric' => 'O campo deve ser um número',
+            'area_edificacao.required' => 'Informe a área da edificação',
+            'area_edificacao.min' => 'A área da edificação deve ser maior que zero'
         ];
     }
 
 // Para garantir que os valores enviados ao banco de dados sejam zero nos devidos campos abaixo ao selecionar um tipo de imóvel.
-// Além disso, transforma vírgulas em pontos para não dar problemas no banco de dados. 
+// Além disso, transforma vírgulas em pontos para não dar problemas no banco de dados nos números decimais. 
+
     protected function prepareForValidation(): void
     {
         if ($this->tipo === 'Terreno') {

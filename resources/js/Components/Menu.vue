@@ -35,10 +35,12 @@
                     <!-- Conteúdo do Menu Dropdown -->
                     <v-card min-width="150px">
                         <v-list :lines="false" density="compact" nav>
-                            <v-list-item prepend-icon="mdi-account">
+                            <v-list-item prepend-icon="mdi-account"
+                            class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">
                                 <v-list-item-title>Perfil</v-list-item-title>
                             </v-list-item>
-                            <v-list-item prepend-icon="mdi-logout">
+                            <v-list-item prepend-icon="mdi-logout"
+                            class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">
                                 <v-list-item-title>Sair</v-list-item-title>
                             </v-list-item>
                         </v-list>

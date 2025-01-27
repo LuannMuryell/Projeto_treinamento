@@ -4,13 +4,27 @@
         <Menu />
         <v-main class="bg-grey-lighten-4 mt-8">
             <v-container>
-                <v-card class="mx-auto" max-width="1400px">
-                    <v-card-title class="text-h4 my-4">
-                        Edição
-                    </v-card-title>
+                <v-card class="mx-auto">
+                    <div class="d-flex align-center justify-space-between">
+                        <v-card-title class="text-h4 my-4">
+                            Edição
+                        </v-card-title>
+                        <v-card-title>
+                            <Link :href="route('properties.index')">
+                                <v-btn 
+                                    rounded="xs" 
+                                    color="blue"
+                                    size="large" 
+                                    variant="tonal" 
+                                    class="me-2">
+                                    Averbações
+                                </v-btn>
+                            </Link>
+                        </v-card-title>
+                    </div>
                     <v-card-text>
                         <form @submit.prevent="submit">
-                            <v-row>
+                            <v-row >
                                 <v-col>
                                     <v-select
                                         v-model="form.tipo"
@@ -35,8 +49,6 @@
                                         {{ form.errors.area_terreno }}
                                     </span>
                                 </v-col>
-                            </v-row>
-                            <v-row>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.area_edificacao"
@@ -49,6 +61,8 @@
                                         {{ form.errors.area_edificacao }}
                                     </span>
                                 </v-col>
+                            </v-row>
+                            <v-row>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.logradouro"
@@ -60,8 +74,6 @@
                                         {{ form.errors.logradouro }}
                                     </span>
                                 </v-col>
-                            </v-row>
-                            <v-row>
                                 <v-col>
                                     <v-text-field
                                         v-model="form.numero"
@@ -112,8 +124,6 @@
                                         {{ form.errors.contribuinte_id }}
                                     </span>
                                 </v-col>
-                            </v-row>
-                            <v-row>
                                 <v-col>
                                     <v-select
                                         v-model="form.situacao"
@@ -123,6 +133,8 @@
                                         readonly
                                     ></v-select>
                                 </v-col>
+                            </v-row>
+                            <v-row dense>
                                 <v-col>
                                     <v-card-actions class="justify-end ga-2">
                                         <Link :href="route('properties.index')">
@@ -144,71 +156,73 @@
 
 <script setup>
 
-    import Menu from '../../Components/Menu.vue'
-    import { Head, Link } from '@inertiajs/vue3'
-    import { useForm } from 'laravel-precognition-vue-inertia'
-    import { useToast } from "vue-toast-notification"
-    import "vue-toast-notification/dist/theme-sugar.css"
-    import { defineProps } from "vue"
+import Menu from '../../Components/Menu.vue'
+import { Head, Link } from '@inertiajs/vue3'
+import { useForm } from 'laravel-precognition-vue-inertia'
+import { useToast } from "vue-toast-notification"
+import "vue-toast-notification/dist/theme-sugar.css"
+import { defineProps, ref } from "vue"
 
-    const props = defineProps({
-        property: Object,
-        people: Object
-    })
+const props = defineProps({
+    property: Object,
+    people: Object,
+    files: Object
+})
 
-    const itemProps = (item) => {
-    return {
-        title: item.name
+const itemProps = (item) => {
+return {
+    title: item.name
     }
 }
 
-    const form = useForm("put", route('properties.update', props.property.ins_municipal),{
-                tipo: props.property.tipo,
-                area_terreno: props.property.area_terreno,
-                area_edificacao: props.property.area_edificacao,
-                logradouro: props.property.logradouro,
-                numero: props.property.numero,
-                bairro: props.property.bairro,
-                complemento: props.property.complemento,
-                contribuinte_id: props.property.contribuinte_id,
-                situacao: props.property.situacao
-            })
-
-    function HandleTipoChange() {
-        if (form.tipo === "Terreno") {
-            form.area_edificacao = 0;
-            form.area_terreno = '';
-        }else if(form.tipo === "Apartamento"){
-            form.area_terreno = 0; 
-            form.area_edificacao = '';
-        }else if (form.tipo === "Casa"){
-            form.area_terreno = ''; 
-            form.area_edificacao = '';
-        }
-    } 
-
-    const toast = useToast()
-
-    const showSuccessToast = () => {
-        toast.success('Cadastro editado com sucesso!', {
-        position: 'top-right',
+const form = useForm("put", route('properties.update', props.property.ins_municipal),{
+            tipo: props.property.tipo,
+            area_terreno: props.property.area_terreno,
+            area_edificacao: props.property.area_edificacao,
+            logradouro: props.property.logradouro,
+            numero: props.property.numero,
+            bairro: props.property.bairro,
+            complemento: props.property.complemento,
+            contribuinte_id: props.property.contribuinte_id,
+            situacao: props.property.situacao
         })
+
+function HandleTipoChange() {
+    if (form.tipo === "Terreno") {
+        form.area_edificacao = 0;
+        form.area_terreno = '';
+    }else if(form.tipo === "Apartamento"){
+        form.area_terreno = 0; 
+        form.area_edificacao = '';
+    }else if (form.tipo === "Casa"){
+        form.area_terreno = ''; 
+        form.area_edificacao = '';
     }
+} 
 
-    const showErrorToast = () => {
-        toast.error('Não foi possível editar o cadastro', {
-        position: 'top-right',
-        })
-            }
+const toast = useToast()
 
-    const submit = () => {
-        form.submit({
-            onSuccess: () => {
+const showSuccessToast = () => {
+    toast.success('Registro editado com sucesso!', {
+    position: 'top-right',
+    })
+}
+
+const showErrorToast = () => {
+    toast.error('Não foi possível editar o registro', {
+    position: 'top-right',
+    })
+}
+
+const submit = () => {
+    form.submit({
+        onSuccess: () => {
+            formFiles.submit()
             showSuccessToast()
         },
-            onError: () => {
+        onError: () => {
             showErrorToast()
-            }
-        })
-    }
+        }
+    })
+}
 </script>

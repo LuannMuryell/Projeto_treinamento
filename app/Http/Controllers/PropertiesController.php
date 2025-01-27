@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 use App\Models\Property;
 use App\Models\Person;
+use App\Models\File;
 use App\Http\Requests\PropertiesRequest;
+use App\Http\Requests\FilesRequest;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class PropertiesController extends Controller
 {
@@ -32,15 +36,29 @@ class PropertiesController extends Controller
             'complemento' => $request->complemento,
             'contribuinte_id' => $request->contribuinte_id,
         ];
+        
+       $property = Property::create($data);
 
-        Property::create($data);
+         if($property && $request->hasFile('files')){
+            foreach ($request->file('files') as $file){
+                $storagePath = $file->store('properties_files', 'public');
+
+                File::create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $storagePath,
+                    'file_ins_municipal' => $property->ins_municipal,
+                ]);
+            }
+        }
     }
+    
 
     public function edit(string $ins_municipal){
 
         $property = Property::find($ins_municipal);
+        $files = File::where('file_ins_municipal', $ins_municipal)->get();
         $people = Person::select('id', 'name')->get();
-        return Inertia::render('Properties/EditProperties', ['property' => $property, 'people' => $people]);
+        return Inertia::render('Properties/EditProperties', ['property' => $property, 'people' => $people, 'files'=>$files]);
     }
 
     public function update(PropertiesRequest $request, string $ins_municipal)
@@ -59,11 +77,48 @@ class PropertiesController extends Controller
         ];
 
         $property->update($data);
+
+        if($request->hasFile('files')){
+            foreach ($request->file('files') as $file){
+                $storagePath = $file->store('properties_files', 'public');
+
+                File::create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $storagePath,
+                    'file_ins_municipal' => $property->ins_municipal,
+                ]);
+            }
+        }
     }
 
     public function destroy($ins_municipal){
 
         Property::find($ins_municipal)->delete();
     }
+
+    public function uploadFile(FilesRequest $request, $file_ins_municipal){
+        if($request->hasFile('files')){
+            foreach ($request->file('files') as $file){
+                $storagePath = $file->store('properties_files', 'public');
+
+                File::create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $storagePath,
+                    'file_ins_municipal' => $file_ins_municipal,
+                ]);
+            }
+        }
+    }
+
+    public function destroyFile(string $id) 
+    {
+        File::destroy($id);
+    }
+
+    public function downloadFile(string $id){
+        $file = File::find($id);
+        return Storage::download($file->file_path, $file->file_name);
+    }
+
 }
 

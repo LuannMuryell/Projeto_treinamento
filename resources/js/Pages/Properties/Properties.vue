@@ -3,7 +3,7 @@
     <v-app>
         <Menu />
         <v-main class="bg-grey-lighten-4" >
-            <v-container class="mx-auto" max-width="1400px">
+            <v-container class="mx-auto">
                 <v-card class="mt-2 pa-8 border">
                     <div class="d-flex align-center justify-space-between">
                         <v-card-title class="text-h4 my-4 pa-2">Imóveis</v-card-title>

@@ -4,7 +4,7 @@
         <Menu />
         <v-main class="bg-grey-lighten-4 mt-8">
             <v-container>
-                <v-card class="mx-auto" max-width="1400px">
+                <v-card class="mx-auto">
                     <v-card-title class="text-h4 my-4">
                         Cadastro
                     </v-card-title>
@@ -113,14 +113,59 @@
                                     </span>
                                 </v-col>
                             </v-row>
+                            <v-row dense>
+                                <v-col>
+                                    <v-btn
+                                        rounded="xs"
+                                        size="large"
+                                        color="blue"
+                                        prepend-icon="mdi-attachment-plus"
+                                        variant="tonal"
+                                        @click="fileInput.click()"
+                                    >
+                                        Anexar documentos
+                                    </v-btn>
+                                    <input
+                                        ref="fileInput"
+                                        type="file"
+                                        accept=".jpg, .jpeg, .png, .pdf"
+                                        multiple
+                                        class="hidden"
+                                        @change="onFileChange"
+                                    />
+                                    <div v-if="errorMessages.length > 0"
+                                        class="ml-1 mt-2 text-base text-sm text-red-500">
+                                        <ul>
+                                            <li v-for="(message, index) in errorMessages" :key="index">{{ message }}</li>
+                                        </ul>
+                                    </div>
+                                    <div v-if="form.files && form.files.length > 0">
+                                        <ul class="d-flex flex-column ga-1 mt-3">
+                                            <li v-for="file in form.files" :key="file.name">
+                                                <span class="text-base">
+                                                    {{ file.name }}
+                                                </span>
+                                                <v-btn
+                                                    @click="deleteFile"
+                                                    color="white"
+                                                    icon="mdi-close-thick"
+                                                    class="text-red-lighten-1 ml-2"
+                                                    size="xs-small"
+                                                    elevation="0">
+                                                </v-btn>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </v-col>
                                 <v-col>
                                     <v-card-actions class="justify-end ga-2">
                                         <Link :href="route ('properties.index')">
-                                            <v-btn rounded="xs" prepend-icon="mdi-arrow-left" color="light-gray" size="large" class="text-light-gray-darken-2" variant="tonal">Sair</v-btn>
+                                            <v-btn rounded="xs" prepend-icon="mdi-arrow-left" color="light-gray" size="large" variant="tonal">Sair</v-btn>
                                         </Link>
                                             <v-btn rounded="xs" color="blue" size="large" variant="tonal" type="submit">Cadastrar</v-btn>
                                     </v-card-actions>
                                 </v-col>
+                            </v-row>
                         </form>
                     </v-card-text>
                 </v-card>
@@ -132,6 +177,7 @@
 <script setup>
 
 import Menu from '../../Components/Menu.vue'
+import { ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3'
 import { useForm } from 'laravel-precognition-vue-inertia'
 import { useToast } from "vue-toast-notification"
@@ -156,7 +202,8 @@ const form = useForm("post", route("properties.store"),{
             numero: '',
             bairro: '',
             complemento: '',
-            contribuinte_id: null
+            contribuinte_id: null,
+            files: []
         })
 
 function HandleTipoChange() {
@@ -198,4 +245,42 @@ const submit = () => {
         }
     })
 }
+
+// Arquivos
+
+const fileInput = ref(null);
+const maxFiles = 5; // Máximo de 5 arquivos
+const sizeFile = 3 * 1024 * 1024; // Máximo de 3MB por arquivo
+const errorMessages = ref([]); 
+
+const onFileChange = (event) => {
+    const newFiles = Array.from(event.target.files);
+
+    errorMessages.value = [];
+
+    if (form.files.length + newFiles.length > maxFiles) {
+        errorMessages.value.push(`Você pode anexar no máximo 5 arquivos`);
+        return;
+    }
+
+    const validFiles = newFiles.filter(file => {
+        if (file.size > sizeFile) {
+            errorMessages.value.push(`O arquivo "${file.name}" não deve exceder 3MB`);
+            return false;
+        }
+        return true;
+    });
+
+    if (errorMessages.value.length === 0) {
+        form.files = form.files.concat(validFiles);
+        form.validate("files");
+    }
+};
+
+// Para remover baseado no índice dentro do array de arquivos
+const deleteFile = (index) => {
+    form.files.splice(index, 1);
+    form.validate("files");
+};
+
 </script>
