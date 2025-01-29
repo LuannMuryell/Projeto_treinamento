@@ -3,14 +3,13 @@
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/home', function () {
-    return Inertia::render('Home');
-})->name('home');
+Route::middleware('auth')->group(function () {
 
 // Pessoas
 Route::get('/pessoas', [PeopleController::class, 'index'])->name('people.index');
@@ -28,11 +27,19 @@ Route::get('/imoveis/{ins_municipal}', [PropertiesController::class, 'edit'])->n
 Route::put('/imoveis/{ins_municipal}', [PropertiesController::class, 'update'])->name('properties.update')->middleware([HandlePrecognitiveRequests::class]);
 Route::delete('/imoveis/{ins_municipal}', [PropertiesController::class, 'destroy'])->name('properties.destroy')->middleware([HandlePrecognitiveRequests::class]);
 
+// Arquivos
 Route::delete('/imoveis/delete{id}', [PropertiesController::class, 'destroyFile'])->name('files.destroy')->middleware([HandlePrecognitiveRequests::class]);
 Route::post('/imoveis/{ins_municipal}/upload', [PropertiesController::class, 'uploadFile'])->name('files.upload')->middleware([HandlePrecognitiveRequests::class]);
 Route::get('/imoveis/download-{id}', [PropertiesController::class, 'downloadFile'])->name('files.download');
 
+// Usuários
+Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
+Route::get('/usuarios/cadastro', [UserController::class, 'create'])->name('users.create');
+Route::post('/usuarios', [UserController::class, 'store'])->name('users.store')->middleware([HandlePrecognitiveRequests::class]);
+// Route::get('/usuarios/{id}', [UserController::class, 'edit'])->name('users.edit');
+// Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('users.update')->middleware([HandlePrecognitiveRequests::class]);
 
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -43,14 +50,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home', function () {
+    return Inertia::render('Home');
+})->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/{id}', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

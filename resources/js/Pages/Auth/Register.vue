@@ -4,26 +4,52 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia'
+import { useToast } from "vue-toast-notification"
+import "vue-toast-notification/dist/theme-sugar.css"
 
-const form = useForm({
+const form = useForm("post", route('users.store'),{
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    cpf: '',
+    profile: ''
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+    form.submit({
+        preserveScroll: true,
+        onSuccess: () => {
+        form.reset();
+        showSuccessToast()
+        },
+        onError: () => {
+            showErrorToast()
+        }
     });
 };
+
+const toast = useToast()
+
+const showSuccessToast = () => {
+    toast.success('Usuário registrado com sucesso!', {
+    position: 'top-right',
+    })
+}
+
+const showErrorToast = () => {
+    toast.error('Não foi possível registrar o usuário', {
+    position: 'top-right',
+    })
+        }
+
 </script>
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
-
+        <Head title="Registro" />
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="name" value="Name" />
@@ -33,9 +59,8 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.name"
-                    required
-                    autofocus
                     autocomplete="name"
+                    @change="form.validate('name')"
                 />
 
                 <InputError class="mt-2" :message="form.errors.name" />
@@ -46,26 +71,26 @@ const submit = () => {
 
                 <TextInput
                     id="email"
-                    type="email"
+                    type="text"
                     class="mt-1 block w-full"
                     v-model="form.email"
-                    required
                     autocomplete="username"
+                    @change="form.validate('email')"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Senha" />
 
                 <TextInput
                     id="password"
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
-                    required
                     autocomplete="new-password"
+                    @change="form.validate('password')"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
@@ -74,7 +99,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Confirmar senha"
                 />
 
                 <TextInput
@@ -82,8 +107,8 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password_confirmation"
-                    required
                     autocomplete="new-password"
+                    @change="form.validate('password_confirmation')"
                 />
 
                 <InputError
@@ -92,12 +117,46 @@ const submit = () => {
                 />
             </div>
 
+            <div class="mt-4">
+                <InputLabel for="cpf" value="CPF" />
+
+                <TextInput
+                    id="cpf"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.cpf"
+                    autocomplete="cpf"
+                    v-mask="'###.###.###-##'"
+                    @change="form.validate('cpf')"
+                />
+
+                <InputError class="mt-2" :message="form.errors.cpf" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="profile" value="Perfil" />
+
+                <select
+                    id="profile"
+                    class="mt-1 block w-full border-blue-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm"
+                    v-model="form.profile"
+                    @change="form.validate('profile')"
+                >
+                    <option disabled value="">Selecione um perfil</option>
+                    <option value="T">Administrador da TI</option>
+                    <option value="S">Administrador do Sistema</option>
+                    <option value="A">Atendente</option>
+                    
+                </select>
+                <InputError class="mt-2" :message="form.errors.profile" />
+            </div>
+
             <div class="mt-4 flex items-center justify-end">
                 <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    :href="route('users.index')"
+                    class="rounded-md text-sm text-gray-600 underline"
                 >
-                    Already registered?
+                    Voltar
                 </Link>
 
                 <PrimaryButton
@@ -105,7 +164,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    Registrar
                 </PrimaryButton>
             </div>
         </form>

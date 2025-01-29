@@ -15,9 +15,13 @@
                 <Link :href="route('properties.index')">
                     <v-list-item prepend-icon="mdi-office-building" class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Imóveis</v-list-item>
                 </Link>
+                <Link v-if="user.profile == 'T' || user.profile == 'S'" :href="route('users.index')">
                 <v-list-item prepend-icon="mdi-account-box" class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Usuários</v-list-item>
+                </Link>
+                <Link v-if="user.profile == 'T' || user.profile == 'S'">
                 <v-list-item prepend-icon="mdi-cog" 
-                class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Configurações</v-list-item>
+                class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Auditoria</v-list-item>
+                </Link> 
             </v-list>
         </v-navigation-drawer>
 
@@ -29,20 +33,18 @@
                 <v-menu>
                     <template #activator="{ props }">
                         <v-avatar v-bind="props" class="mx-2">
-                            <v-btn icon="mdi-account-circle" variant="tonal" class="bg-gray-200"></v-btn>
+                            <v-btn icon="mdi-account-circle" variant="flat"></v-btn>
                         </v-avatar>
                     </template>
                     <!-- Conteúdo do Menu Dropdown -->
-                    <v-card min-width="150px">
-                        <v-list :lines="false" density="compact" nav>
-                            <v-list-item prepend-icon="mdi-account"
-                            class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">
-                                <v-list-item-title>Perfil</v-list-item-title>
-                            </v-list-item>
-                            <v-list-item prepend-icon="mdi-logout"
-                            class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">
-                                <v-list-item-title>Sair</v-list-item-title>
-                            </v-list-item>
+                    <v-card>
+                        <v-list :lines="false" nav>
+                            <Link :href="route('logout')" method="post"> 
+                                <v-list-item prepend-icon="mdi-logout"
+                                class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">
+                                    <v-list-item-title>Sair</v-list-item-title>
+                                </v-list-item>
+                            </Link>
                         </v-list>
                     </v-card>
                 </v-menu>
@@ -51,18 +53,15 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { Link } from "@inertiajs/vue3";
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import { defineProps, ref } from "vue"
+import { usePage } from '@inertiajs/vue3';
 
-export default {
-    name: 'Menu',
-    components: {
-        Link,
-    },
-    data() {
-        return {
-            IsDrawerOpen: false,
-        };
-    },
-};
+const user = usePage().props.auth.user
+
+const IsDrawerOpen = ref(false)
+
 </script>

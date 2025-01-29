@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -32,6 +33,16 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'O campo de e-mail é obrigatório',
+            'email.email' => 'Por favor, insira um e-mail válido',
+            'password.required' => 'O campo de senha é obrigatório',
+            'throttle' => 'Você fez muitas tentativas de login. Por favor, tente novamente em :minutes minutos.',
+        ];
+    }
+
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -41,13 +52,26 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
+
+        // Caso o usuário esteja com a conta desativada (N), irá desloga-lo imediatamente
+
+        $user = Auth::user();
+
+        if ($user->active === 'N') {
+
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'Sua conta está desativada. Entre em contato com o administrador',
+            ]);
+    }
 
         RateLimiter::clear($this->throttleKey());
     }
@@ -59,7 +83,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -80,6 +104,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

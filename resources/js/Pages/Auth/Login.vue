@@ -5,7 +5,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia';
 
 defineProps({
     canResetPassword: {
@@ -16,14 +17,14 @@ defineProps({
     },
 });
 
-const form = useForm({
+const form = useForm("post", route('login'),{
     email: '',
     password: '',
     remember: false,
 });
 
 const submit = () => {
-    form.post(route('login'), {
+    form.submit({
         onFinish: () => form.reset('password'),
     });
 };
@@ -46,7 +47,6 @@ const submit = () => {
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
-                    required
                     autofocus
                     autocomplete="username"
                 />
@@ -62,7 +62,6 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
-                    required
                     autocomplete="current-password"
                 />
 

@@ -15,7 +15,7 @@
                                     rounded="xs" 
                                     color="blue"
                                     size="large" 
-                                    variant="tonal" 
+                                    variant="flat" 
                                     class="me-2">
                                     Averbações
                                 </v-btn>
@@ -138,9 +138,9 @@
                                 <v-col>
                                     <v-card-actions class="justify-end ga-2">
                                         <Link :href="route('properties.index')">
-                                            <v-btn rounded="xs" prepend-icon="mdi-arrow-left" color="light-gray" size="large" class="text-light-gray-darken-2" variant="tonal">Sair</v-btn>
+                                            <v-btn rounded="xs" prepend-icon="mdi-arrow-left" color="grey-lighten-1" size="large" class="text-light-gray-darken-2" variant="flat">Sair</v-btn>
                                         </Link>
-                                            <v-btn rounded="xs" color="blue" size="large" variant="tonal" type="submit">Salvar</v-btn>
+                                            <v-btn rounded="xs" color="blue" size="large" variant="flat" type="submit">Salvar</v-btn>
                                     </v-card-actions>
                                 </v-col>
                             </v-row>

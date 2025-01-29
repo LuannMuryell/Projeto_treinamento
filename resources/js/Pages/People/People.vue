@@ -18,7 +18,7 @@
                     <v-table>
                         <thead>
                             <tr>
-                                <th class="py-2 px-4 text-center">Id</th>
+                                <th class="py-2 px-4 text-center">ID</th>
                                 <th class="py-2 px-4 text-center">Nome</th>
                                 <th class="py-2 px-4 text-center">CPF</th>
                                 <th class="py-2 px-4 text-center">Data Nasc.</th>
@@ -39,7 +39,7 @@
                                     </Link>
                                     <v-btn
                                         type="submit"
-                                        rounded="xs" small color="red" prepend-icon="mdi-delete" variant="tonal"
+                                        rounded="xs" small color="blue" prepend-icon="mdi-delete" variant="tonal"
                                         @click="confirmDelete(person)"
                                     >Excluir</v-btn>
                                 </td>
@@ -59,7 +59,7 @@
                     <v-card-text>Tem certeza de que deseja excluir este registro?</v-card-text>
                     <v-card-actions>
                         <v-btn rounded="xs" small color="blue" variant="tonal" text @click="isDialogOpen = false">Cancelar</v-btn>
-                        <v-btn rounded="xs" small color="red" variant="tonal" text @click="deletePerson">Excluir</v-btn>
+                        <v-btn rounded="xs" small color="blue" variant="tonal" text @click="deletePerson">Excluir</v-btn>
                     </v-card-actions>
             </v-card>
         </v-dialog>

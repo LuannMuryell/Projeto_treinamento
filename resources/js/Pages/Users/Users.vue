@@ -1,0 +1,81 @@
+<template>
+    <Head title="Usuários"/>
+        <v-app>
+            <Menu />
+            <v-main class="bg-grey-lighten-4" >
+                <v-container class="mx-auto">
+                    <v-card class="mt-2 pa-8 border">
+                        <div class="d-flex align-center justify-space-between">
+                            <v-card-title class="text-h4 my-4 pa-2">Usuários</v-card-title>
+                            <v-card-title>
+                            <Link v-if="authUser.profile === 'T' || authUser.profile === 'S'" 
+                            :href="route('users.create')">
+                                <v-btn rounded="xs" color="blue"
+                                size="large" 
+                                variant="tonal" class="me-2">Registrar Usuário</v-btn>
+                            </Link>
+                        </v-card-title>
+                        </div>
+                        <v-table>
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 text-center">ID</th>
+                                    <th class="py-2 px-4 text-center">Nome</th>
+                                    <th class="py-2 px-4 text-center">E-mail</th>
+                                    <th class="py-2 px-4 text-center">Perfil</th>
+                                    <th class="py-2 px-4 text-center">Atividade</th>
+                                    <th class="py-2 px-4 text-center">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="user in users" :key="user.id">
+                                    <td class="py-2 px-4 text-center">{{ user.id }}</td>
+                                    <td class="py-2 px-4 text-center">{{ user.name }}</td>
+                                    <td class="py-2 px-4 text-center">{{ user.email }}</td>
+                                    <td class="py-2 px-4 text-center">{{ viewProfileName(user.profile) }}</td>
+                                    <td class="py-2 px-4 text-center">{{ viewProfileStatus(user.active) }}</td>
+                                    <td class="py-2 me-2 text-center">
+                                    <Link :href="route('profile.edit', user.id)">
+                                        <v-btn rounded="xs" small color="blue" prepend-icon="mdi-pencil" variant="tonal" class="me-2">Visualizar</v-btn>
+                                    </Link>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </v-table>
+                </v-card>
+            </v-container>
+        </v-main>
+      </v-app>
+</template>
+    
+<script setup>
+import Menu from '../../Components/Menu.vue'
+import { Head, Link, useForm } from "@inertiajs/vue3"
+import { defineProps } from "vue"
+    
+    
+const props = defineProps ({
+        users: Array,
+        authUser: Object
+})
+    
+const viewProfileName = (profile) => {
+    if (profile === 'T'){
+        return 'Administrador da TI'
+    }else if(profile === 'S'){
+        return 'Administrador do Sistema'
+    }else{
+        return 'Atendente'
+    }
+}
+
+const viewProfileStatus = (active) => {
+    if (active === 'S'){
+        return 'Ativo'
+    }else{
+        return 'Inativo'
+    }
+}
+
+</script>
+    
