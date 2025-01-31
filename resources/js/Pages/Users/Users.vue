@@ -8,8 +8,7 @@
                         <div class="d-flex align-center justify-space-between">
                             <v-card-title class="text-h4 my-4 pa-2">Usuários</v-card-title>
                             <v-card-title>
-                            <Link v-if="authUser.profile === 'T' || authUser.profile === 'S'" 
-                            :href="route('users.create')">
+                            <Link :href="route('users.create')">
                                 <v-btn rounded="xs" color="blue"
                                 size="large" 
                                 variant="tonal" class="me-2">Registrar Usuário</v-btn>
@@ -50,13 +49,12 @@
     
 <script setup>
 import Menu from '../../Components/Menu.vue'
-import { Head, Link, useForm } from "@inertiajs/vue3"
+import { Head, Link } from "@inertiajs/vue3"
 import { defineProps } from "vue"
     
-    
+
 const props = defineProps ({
         users: Array,
-        authUser: Object
 })
     
 const viewProfileName = (profile) => {

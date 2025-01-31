@@ -10,14 +10,14 @@
                             Edição
                         </v-card-title>
                         <v-card-title>
-                            <Link :href="route('properties.index')">
+                            <Link :href="route('averbacoes.index', props.property.ins_municipal )">
                                 <v-btn 
                                     rounded="xs" 
                                     color="blue"
                                     size="large" 
-                                    variant="flat" 
+                                    variant="tonal" 
                                     class="me-2">
-                                    Averbações
+                                    Visualizar Averbações
                                 </v-btn>
                             </Link>
                         </v-card-title>
@@ -138,9 +138,9 @@
                                 <v-col>
                                     <v-card-actions class="justify-end ga-2">
                                         <Link :href="route('properties.index')">
-                                            <v-btn rounded="xs" prepend-icon="mdi-arrow-left" color="grey-lighten-1" size="large" class="text-light-gray-darken-2" variant="flat">Sair</v-btn>
+                                            <v-btn rounded="xs" prepend-icon="mdi-arrow-left" color="light-gray" size="large" class="text-light-gray-darken-2" variant="tonal">Sair</v-btn>
                                         </Link>
-                                            <v-btn rounded="xs" color="blue" size="large" variant="flat" type="submit">Salvar</v-btn>
+                                            <v-btn rounded="xs" color="blue" size="large" variant="tonal" type="submit">Salvar</v-btn>
                                     </v-card-actions>
                                 </v-col>
                             </v-row>
@@ -166,8 +166,11 @@ import { defineProps, ref } from "vue"
 const props = defineProps({
     property: Object,
     people: Object,
-    files: Object
+    files: Object,
+    averbacao: Object
 })
+
+console.log("Averbação recebida:", props.averbacao);
 
 const itemProps = (item) => {
 return {
@@ -217,7 +220,7 @@ const showErrorToast = () => {
 const submit = () => {
     form.submit({
         onSuccess: () => {
-            formFiles.submit()
+            form.submit()
             showSuccessToast()
         },
         onError: () => {

@@ -17,5 +17,12 @@ class areaRule implements ValidationRule
         if (preg_match('/\.\d{3,}/', $value)) {
             $fail("O campo não deve exceder duas casas decimais");
         }
+
+        $area_terreno = request()->input('area_terreno');
+
+        if ($area_terreno && $value > $area_terreno) {
+            $fail('A área da edificação não pode ser maior que a área do terreno');
+        }
+
     }
 }

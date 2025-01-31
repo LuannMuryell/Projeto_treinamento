@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Property;
 use App\Models\Person;
+use App\Models\Averbacao;
 use App\Models\File;
 use App\Http\Requests\PropertiesRequest;
 use App\Http\Requests\FilesRequest;
@@ -54,11 +55,15 @@ class PropertiesController extends Controller
     
 
     public function edit(string $ins_municipal){
-
+       
         $property = Property::find($ins_municipal);
+
         $files = File::where('file_ins_municipal', $ins_municipal)->get();
+
+        $averbacao = Averbacao::where('property_id', $ins_municipal)->first();
+
         $people = Person::select('id', 'name')->get();
-        return Inertia::render('Properties/EditProperties', ['property' => $property, 'people' => $people, 'files'=>$files]);
+        return Inertia::render('Properties/EditProperties', ['property' => $property, 'people' => $people, 'files'=>$files, 'averbacao' => $averbacao]);
     }
 
     public function update(PropertiesRequest $request, string $ins_municipal)

@@ -24,6 +24,7 @@
                                 <th class="py-2 px-4 text-center">Número</th>
                                 <th class="py-2 px-4 text-center">Bairro</th>
                                 <th class="py-2 px-4 text-center">Contribuinte</th>
+                                <th class="py-2 px-4 text-center">Situação</th>
                                 <th class="py-2 px-4 text-center">Ações</th>
                             </tr>
                         </thead>
@@ -35,6 +36,13 @@
                                 <td class="py-2 px-4 text-center">{{ property.numero }}</td>
                                 <td class="py-2 px-4 text-center">{{ property.bairro }}</td>
                                 <td class="py-2 px-4 text-center">{{ property.contribuinte.name }}</td>
+                                <td class="py-2 px-4 text-center">
+                                    <div class="flex items-center justify-center">
+                                        <v-icon v-if="property.situacao == 'Ativo'" color="green" size="x-small" class="me-1">mdi-circle</v-icon>
+                                        <v-icon v-else color="red" size="x-small" class="me-1">mdi-circle</v-icon> 
+                                        <span>{{ property.situacao }}</span>
+                                    </div>
+                                </td>
                                 <td class="py-2 me-2 text-center">
                                     <Link :href="route('properties.edit', property.ins_municipal)">
                                         <v-btn rounded="xs" small color="blue" prepend-icon="mdi-pencil" variant="tonal" class="me-2">Visualizar</v-btn>

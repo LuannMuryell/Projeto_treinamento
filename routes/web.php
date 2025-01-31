@@ -4,6 +4,7 @@ use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AverbacoesController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -36,8 +37,12 @@ Route::get('/imoveis/download-{id}', [PropertiesController::class, 'downloadFile
 Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
 Route::get('/usuarios/cadastro', [UserController::class, 'create'])->name('users.create');
 Route::post('/usuarios', [UserController::class, 'store'])->name('users.store')->middleware([HandlePrecognitiveRequests::class]);
-// Route::get('/usuarios/{id}', [UserController::class, 'edit'])->name('users.edit');
-// Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('users.update')->middleware([HandlePrecognitiveRequests::class]);
+
+// Averbações
+
+Route::get('/imoveis/visualizar/averbacao/{ins_municipal}', [AverbacoesController::class, 'index'])->name('averbacoes.index');
+Route::get('/imoveis/registrar-averbacao/imovel-{ins_municipal}', [AverbacoesController::class, 'create'])->name('averbacoes.create');
+Route::post('/imoveis/averbacoes', [AverbacoesController::class, 'store'])->name('averbacoes.store')->middleware([HandlePrecognitiveRequests::class]);
 
 });
 
