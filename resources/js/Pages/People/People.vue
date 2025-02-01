@@ -15,6 +15,14 @@
                             </Link>
                         </v-card-title>
                     </div>
+                    <!--<v-text-field
+                        v-model="search"
+                        label="Buscar"
+                        variant="outlined"
+                        class="mb-4"
+                        prepend-inner-icon="mdi-magnify"
+                        @update:modelValue="fetchSearch"
+                    ></v-text-field>-->
                     <v-table>
                         <thead>
                             <tr>
@@ -47,9 +55,13 @@
                         </tbody>
                     </v-table>
                 </v-card>
-                <div class="float-end">
-                    <Pagination class="mt-4" :links="people.links" />
-                </div>  
+                <v-pagination
+                    v-model="currentPage"
+                    :length="people.last_page"
+                    :total-visible="5"
+                    @update:modelValue="fetchPage"
+                    next-icon="mdi-menu-right"
+                    prev-icon="mdi-menu-left"/>
             </v-container>
         </v-main>
 
@@ -68,26 +80,25 @@
 
 <script setup>
 import Menu from '../../Components/Menu.vue'
-import Pagination from '../../Components/Pagination.vue'
-import { Head, Link, useForm } from "@inertiajs/vue3"
+import { Head, Link, useForm, router } from "@inertiajs/vue3"
 import { useToast } from "vue-toast-notification"
 import { defineProps, ref } from "vue"
 
+const props = defineProps ({
+    people: Object,
+})
+
 const formattedDate = (date) => {
-    const year = date.slice(0, 4); // YYYY
-    const month = date.slice(5, 7); // MM
-    const day = date.slice(8, 10); // dd
-    return day + "/" + month + "/" + year; 
+    const year = date.slice(0, 4)
+    const month = date.slice(5, 7)
+    const day = date.slice(8, 10)
+    return day + "/" + month + "/" + year
 };
 
 const formattedCpf = (cpf) => {
     cpf = cpf.replace(/\D/g, ""); 
-    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
 };
-
-const props = defineProps ({
-    people: Object
-})
     
 const toast = useToast()
 const isDialogOpen = ref(false)
@@ -122,4 +133,12 @@ const deletePerson = () => {
         }
     })
 }
+
+// Paginação
+
+const currentPage = ref(props.people.current_page);
+
+const fetchPage = (page) => {
+    router.get(route('people.index', { page }));
+};
 </script>

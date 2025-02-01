@@ -34,7 +34,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="property in properties" :key="property.ins_municipal">
+                            <tr v-for="property in properties.data" :key="property.ins_municipal">
                                 <td class="py-2 px-4 text-center">{{ property.ins_municipal }}</td>
                                 <td class="py-2 px-4 text-center">{{ property.tipo }}</td>
                                 <td class="py-2 px-4 text-center">{{ property.logradouro }}</td>
@@ -62,6 +62,13 @@
                         </tbody>
                     </v-table>
                 </v-card>
+                <v-pagination
+                    v-model="currentPage"
+                    :length="properties.last_page"
+                    :total-visible="5"
+                    @update:modelValue="fetchPage"
+                    next-icon="mdi-menu-right"
+                    prev-icon="mdi-menu-left"/>
             </v-container>
         </v-main>
         <v-dialog v-model="isDialogOpen" max-width="500">
@@ -79,7 +86,7 @@
 
 <script setup>
 import Menu from '../../Components/Menu.vue'
-import { Head, Link, useForm } from "@inertiajs/vue3"
+import { Head, Link, useForm, router } from "@inertiajs/vue3"
 import { useToast } from "vue-toast-notification"
 import { defineProps, ref } from "vue"
 
@@ -121,4 +128,11 @@ const deleteProperty = () => {
     })
 }
 
+// Paginação
+
+const currentPage = ref(props.properties.current_page);
+
+const fetchPage = (page) => {
+    router.get(route('properties.index', { page }));
+};
 </script>

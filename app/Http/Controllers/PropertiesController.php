@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class PropertiesController extends Controller
 {
     public function index(){
-        $properties = Property::with('contribuinte')->get();
+        $properties = Property::with('contribuinte')->paginate(8);
         return Inertia::render('Properties/Properties', ['properties' => $properties]);
     }
 

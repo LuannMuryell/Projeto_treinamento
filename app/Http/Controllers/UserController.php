@@ -16,7 +16,7 @@ class UserController extends Controller
             return redirect()->route('home');
         }
 
-        $users = User::all();
+        $users = User::paginate(8);
         return Inertia::render('Users/Users', ['users' => $users, 'authUser' => $authUser]);
     }
 

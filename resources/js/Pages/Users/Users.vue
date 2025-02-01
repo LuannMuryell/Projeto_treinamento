@@ -27,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="user in users" :key="user.id">
+                                <tr v-for="user in users.data" :key="user.id">
                                     <td class="py-2 px-4 text-center">{{ user.id }}</td>
                                     <td class="py-2 px-4 text-center">{{ user.name }}</td>
                                     <td class="py-2 px-4 text-center">{{ user.email }}</td>
@@ -48,6 +48,13 @@
                         </tbody>
                     </v-table>
                 </v-card>
+                <v-pagination
+                    v-model="currentPage"
+                    :length="users.last_page"
+                    :total-visible="5"
+                    @update:modelValue="fetchPage"
+                    next-icon="mdi-menu-right"
+                    prev-icon="mdi-menu-left"/>
             </v-container>
         </v-main>
       </v-app>
@@ -55,12 +62,11 @@
     
 <script setup>
 import Menu from '../../Components/Menu.vue'
-import { Head, Link } from "@inertiajs/vue3"
-import { defineProps } from "vue"
+import { Head, Link, router } from "@inertiajs/vue3"
+import { defineProps, ref } from "vue"
     
-
 const props = defineProps ({
-        users: Array,
+        users: Object,
 })
     
 const viewProfileName = (profile) => {
@@ -81,5 +87,12 @@ const viewProfileStatus = (active) => {
     }
 }
 
+// Paginação
+
+const currentPage = ref(props.users.current_page);
+
+const fetchPage = (page) => {
+    router.get(route('users.index', { page }));
+};
 </script>
     
