@@ -8,6 +8,11 @@
                     <div class="d-flex align-center justify-space-between">
                         <v-card-title class="text-h4 my-4 pa-2">Imóveis</v-card-title>
                         <v-card-title>
+                            <Link :href="route('synthetic.report')">
+                                <v-btn prepend-icon="mdi-file-download-outline" rounded="xs" color="blue"
+                                size="large" 
+                                variant="tonal" class="me-2">Emitir Relatório</v-btn>
+                            </Link>
                             <Link :href="route('properties.create')">
                                 <v-btn rounded="xs" color="blue"
                                 size="large" 

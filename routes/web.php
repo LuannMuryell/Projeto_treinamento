@@ -5,6 +5,7 @@ use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AverbacoesController;
+use App\Http\Controllers\ReportsController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,11 @@ Route::post('/usuarios', [UserController::class, 'store'])->name('users.store')-
 Route::get('/imoveis/visualizar/averbacao/{ins_municipal}', [AverbacoesController::class, 'index'])->name('averbacoes.index');
 Route::get('/imoveis/registrar-averbacao/imovel-{ins_municipal}', [AverbacoesController::class, 'create'])->name('averbacoes.create');
 Route::post('/imoveis/averbacoes', [AverbacoesController::class, 'store'])->name('averbacoes.store')->middleware([HandlePrecognitiveRequests::class]);
+
+// Relatórios em PDF
+
+Route::get('/relatorio/imoveis', [ReportsController::class, 'syntheticPdf'])->name('synthetic.report');
+Route::get('/relatorio/imoveis/detalhado/{ins_municipal}', [ReportsController::class, 'analyticalPdf'])->name('analytical.report');
 
 });
 

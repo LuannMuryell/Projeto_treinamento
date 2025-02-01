@@ -32,5 +32,9 @@ class Property extends Model
     {
         return $this->hasMany(File::class,'file_ins_municipal', 'ins_municipal');
     }
+    public function averbacoes()
+    {
+        return $this->hasMany(Averbacao::class, 'property_id', 'ins_municipal');
+    }
 }
 

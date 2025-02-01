@@ -32,7 +32,13 @@
                                     <td class="py-2 px-4 text-center">{{ user.name }}</td>
                                     <td class="py-2 px-4 text-center">{{ user.email }}</td>
                                     <td class="py-2 px-4 text-center">{{ viewProfileName(user.profile) }}</td>
-                                    <td class="py-2 px-4 text-center">{{ viewProfileStatus(user.active) }}</td>
+                                    <td class="py-2 px-4 text-center">
+                                        <div class="flex items-center justify-center">
+                                            <v-icon v-if="user.active == 'S'" color="green" size="x-small" class="me-1">mdi-circle</v-icon>
+                                            <v-icon v-else color="red" size="x-small" class="me-1">mdi-circle</v-icon>
+                                            <span>{{ viewProfileStatus(user.active) }}</span>
+                                        </div>
+                                    </td>
                                     <td class="py-2 me-2 text-center">
                                     <Link :href="route('profile.edit', user.id)">
                                         <v-btn rounded="xs" small color="blue" prepend-icon="mdi-pencil" variant="tonal" class="me-2">Visualizar</v-btn>

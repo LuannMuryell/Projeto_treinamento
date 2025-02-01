@@ -26,7 +26,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="averbacao in averbacoes" :key="averbacao.id">
-                                <td class="py-2 px-4 text-center">{{ averbacao.descricao }}</td>
+                                <td class="py-2 px-4 text-center max-w-xs">{{ averbacao.descricao }}</td>
                                 <td class="py-2 px-4 text-center">{{ averbacao.evento }}</td>
                                 <td class="py-2 px-4 text-center">{{ averbacao.medida }}m²</td>
                                 <td class="py-2 px-4 text-center">{{ formattedDate(averbacao.data_averbacao) }}</td>
@@ -55,13 +55,9 @@ const props = defineProps ({
 })
 
 const formattedDate = (date) => {
-    const year = date.slice(0, 4); // YYYY
-    const month = date.slice(5, 7); // MM
-    const day = date.slice(8, 10); // dd
+    const year = date.slice(0, 4);
+    const month = date.slice(5, 7); 
+    const day = date.slice(8, 10); 
     return day + "/" + month + "/" + year; 
 };
-
-console.log("Averbações recebidas:", props.averbacoes)
-console.log("Averbações recebidas:", props.averbacoes);
-
 </script>

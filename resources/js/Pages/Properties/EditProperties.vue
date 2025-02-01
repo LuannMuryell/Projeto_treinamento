@@ -10,6 +10,17 @@
                             Edição
                         </v-card-title>
                         <v-card-title>
+                            <Link :href="route('analytical.report', props.property.ins_municipal)" download>
+                                <v-btn 
+                                    rounded="xs" 
+                                    color="blue"
+                                    size="large"
+                                    prepend-icon="mdi-file-download-outline"
+                                    variant="tonal" 
+                                    class="me-2">
+                                    Relatório Detalhado
+                                </v-btn>
+                            </Link>
                             <Link :href="route('averbacoes.index', props.property.ins_municipal )">
                                 <v-btn 
                                     rounded="xs" 
