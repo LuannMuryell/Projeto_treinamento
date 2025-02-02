@@ -14,7 +14,7 @@
                                 label="Buscar"
                                 variant="outlined"
                                 disable-focus
-                                prepend-inner-icon="mdi-magnify"
+                                prepend-icon="mdi-magnify"
                                 class="me-2"
                                 style="width: 250px; margin-top: 2px;">
                             </v-text-field>

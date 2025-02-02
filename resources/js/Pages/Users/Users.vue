@@ -6,7 +6,7 @@
                 <v-container class="mx-auto">
                     <v-card class="mt-2 pa-8 border">
                         <div class="d-flex align-center justify-space-between">
-                            <v-card-title class="text-h4 my-4 pa-2">Usuários</v-card-title>
+                            <v-card-title class="text-h4">Usuários</v-card-title>
                             <v-card-title>
                             <Link :href="route('users.create')">
                                 <v-btn rounded="xs" color="blue"

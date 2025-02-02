@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AverbacoesController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\AuditsController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,10 @@ Route::post('/imoveis/averbacoes', [AverbacoesController::class, 'store'])->name
 
 Route::get('/relatorio/imoveis', [ReportsController::class, 'syntheticPdf'])->name('synthetic.report');
 Route::get('/relatorio/imoveis/detalhado/{ins_municipal}', [ReportsController::class, 'analyticalPdf'])->name('analytical.report');
+
+// Auditoria do Sistema
+
+Route::get('/auditoria', [AuditsController::class, 'index'])->name('audits.index');
 
 });
 

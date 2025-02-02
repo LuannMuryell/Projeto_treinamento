@@ -18,8 +18,10 @@
                 <Link v-if="user.profile == 'T' || user.profile == 'S'" :href="route('users.index')">
                 <v-list-item prepend-icon="mdi-account-box" class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Usuários</v-list-item>
                 </Link>
+                <Link v-if="user.profile == 'T' || user.profile == 'S'" :href="route('audits.index')">
                 <v-list-item prepend-icon="mdi-magnify" 
                 class="transition duration-200 ease-out hover:bg-gray-200 hover:text-gray-900">Auditoria</v-list-item>
+                </Link>
             </v-list>
         </v-navigation-drawer>
 
