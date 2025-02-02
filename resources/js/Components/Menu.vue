@@ -25,7 +25,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar flat class="border-b">
+        <v-app-bar flat class="border-b" color="blue">
             <v-app-bar-nav-icon @click="IsDrawerOpen = !IsDrawerOpen"></v-app-bar-nav-icon>
             <v-app-bar-title></v-app-bar-title>
 

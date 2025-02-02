@@ -18,12 +18,17 @@
                                 class="me-2"
                                 style="width: 250px; margin-top: 2px;">
                             </v-text-field>
-                            <Link :href="route('synthetic.report')">
-                                <v-btn prepend-icon="mdi-file-download-outline" rounded="xs" color="blue"
-                                    size="large" variant="tonal" class="me-2">
+                            <v-btn 
+                                rounded="xs" 
+                                color="blue"
+                                size="large"
+                                prepend-icon="mdi-file-download-outline"
+                                variant="tonal" 
+                                class="me-2"
+                                :href="route('synthetic.report')" 
+                                target="_blank">
                                     Emitir Relatório
-                                </v-btn>
-                            </Link>
+                            </v-btn>
                             <Link :href="route('properties.create')">
                                 <v-btn rounded="xs" color="blue" size="large" variant="tonal">
                                     Novo Cadastro
