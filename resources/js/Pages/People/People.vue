@@ -6,23 +6,25 @@
             <v-container class="mx-auto">
                 <v-card class="mt-2 pa-8 border">
                     <div class="d-flex align-center justify-space-between">
-                        <v-card-title class="text-h4 my-4 pa-2">Pessoas</v-card-title>
-                        <v-card-title>
-                            <Link :href="route('people.create')">
-                                <v-btn rounded="xs" color="blue"
-                                size="large" 
-                                variant="tonal" class="me-2">Novo Cadastro</v-btn>
-                            </Link>
-                        </v-card-title>
+                            <v-card-title class="text-h4" style="position: relative; top: -10px;">Pessoas</v-card-title>
+                            <div class="d-flex gap-2">
+                            <v-text-field
+                            v-model="search"
+                            density="compact"
+                            label="Buscar"
+                            variant="outlined"
+                            disable-focus
+                            prepend-icon="mdi-magnify"
+                            class="me-2"
+                            style="width: 250px; margin-top: 2px">
+                        </v-text-field>
+                                <Link :href="route('people.create')">
+                                    <v-btn rounded="xs" color="blue"
+                                    size="large" 
+                                    variant="tonal" class="me-2">Novo Cadastro</v-btn>
+                                </Link>
+                        </div>
                     </div>
-                    <!--<v-text-field
-                        v-model="search"
-                        label="Buscar"
-                        variant="outlined"
-                        class="mb-4"
-                        prepend-inner-icon="mdi-magnify"
-                        @update:modelValue="fetchSearch"
-                    ></v-text-field>-->
                     <v-table>
                         <thead>
                             <tr>
@@ -35,7 +37,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="person in people.data" :key="person.id">
+                            <tr v-for="person in filteredPeople" :key="person.id">
                                 <td class="py-2 px-4 text-center">{{ person.id }}</td>
                                 <td class="py-2 px-4 text-center">{{ person.name }}</td>
                                 <td class="py-2 px-4 text-center">{{ formattedCpf(person.cpf) }}</td>
@@ -82,7 +84,7 @@
 import Menu from '../../Components/Menu.vue'
 import { Head, Link, useForm, router } from "@inertiajs/vue3"
 import { useToast } from "vue-toast-notification"
-import { defineProps, ref } from "vue"
+import { defineProps, ref, computed } from "vue"
 
 const props = defineProps ({
     people: Object,
@@ -141,4 +143,20 @@ const currentPage = ref(props.people.current_page);
 const fetchPage = (page) => {
     router.get(route('people.index', { page }));
 };
+
+// Filtro
+
+const search = ref("");
+
+const filteredPeople = computed(() => {
+  return props.people.data.filter((person) => {
+    const searchTerm = search.value.toLowerCase();
+    return (
+      person.name.toLowerCase().includes(searchTerm) ||
+      person.cpf.replace(/\D/g, "").includes(searchTerm) || 
+      formattedDate(person.birth_date).includes(searchTerm) ||
+      person.gender.toLowerCase().includes(searchTerm)
+    );
+  });
+});
 </script>

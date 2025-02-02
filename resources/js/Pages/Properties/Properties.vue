@@ -6,19 +6,30 @@
             <v-container class="mx-auto">
                 <v-card class="mt-2 pa-8 border">
                     <div class="d-flex align-center justify-space-between">
-                        <v-card-title class="text-h4 my-4 pa-2">Imóveis</v-card-title>
-                        <v-card-title>
+                        <v-card-title class="text-h4" style="position: relative; top: -10px;">Imóveis</v-card-title>
+                        <div class="d-flex gap-2">
+                            <v-text-field
+                                v-model="search"
+                                density="compact"
+                                label="Buscar"
+                                variant="outlined"
+                                disable-focus
+                                prepend-inner-icon="mdi-magnify"
+                                class="me-2"
+                                style="width: 250px; margin-top: 2px;">
+                            </v-text-field>
                             <Link :href="route('synthetic.report')">
                                 <v-btn prepend-icon="mdi-file-download-outline" rounded="xs" color="blue"
-                                size="large" 
-                                variant="tonal" class="me-2">Emitir Relatório</v-btn>
+                                    size="large" variant="tonal" class="me-2">
+                                    Emitir Relatório
+                                </v-btn>
                             </Link>
                             <Link :href="route('properties.create')">
-                                <v-btn rounded="xs" color="blue"
-                                size="large" 
-                                variant="tonal" class="me-2">Novo Cadastro</v-btn>
+                                <v-btn rounded="xs" color="blue" size="large" variant="tonal">
+                                    Novo Cadastro
+                                </v-btn>
                             </Link>
-                        </v-card-title>
+                        </div>
                     </div>
                     <v-table>
                         <thead>
@@ -34,7 +45,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="property in properties.data" :key="property.ins_municipal">
+                            <tr v-for="property in filteredProperties" :key="property.ins_municipal">
                                 <td class="py-2 px-4 text-center">{{ property.ins_municipal }}</td>
                                 <td class="py-2 px-4 text-center">{{ property.tipo }}</td>
                                 <td class="py-2 px-4 text-center">{{ property.logradouro }}</td>
@@ -88,7 +99,7 @@
 import Menu from '../../Components/Menu.vue'
 import { Head, Link, useForm, router } from "@inertiajs/vue3"
 import { useToast } from "vue-toast-notification"
-import { defineProps, ref } from "vue"
+import { defineProps, ref, computed } from "vue"
 
 const props = defineProps ({
     properties: Object
@@ -135,4 +146,21 @@ const currentPage = ref(props.properties.current_page);
 const fetchPage = (page) => {
     router.get(route('properties.index', { page }));
 };
+
+const search = ref("");
+
+const filteredProperties = computed(() => {
+  return props.properties.data.filter((property) => {
+    const searchTerm = search.value.toLowerCase();
+    return (
+        String(property.ins_municipal).includes(searchTerm) ||
+        property.tipo.toLowerCase().includes(searchTerm) || 
+        property.logradouro.toLowerCase().includes(searchTerm) ||
+        String(property.numero).includes(searchTerm) ||
+        property.bairro.toLowerCase().includes(searchTerm) ||
+        property.contribuinte.name.toLowerCase().includes(searchTerm) ||
+        property.situacao.toLowerCase().includes(searchTerm) 
+    )
+  })
+})
 </script>
