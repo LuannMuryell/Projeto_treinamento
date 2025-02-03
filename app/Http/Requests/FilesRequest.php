@@ -22,7 +22,7 @@ class FilesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'files' => ['nullabe', 'array', 'max:5'],
+            'files' => ['nullable', 'array', 'max:5'],
             'files.*' => ['file', 'mimes:jpg,jpeg,png,pdf','max:3072']
         ];
     }

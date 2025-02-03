@@ -31,9 +31,9 @@ Route::put('/imoveis/{ins_municipal}', [PropertiesController::class, 'update'])-
 Route::delete('/imoveis/{ins_municipal}', [PropertiesController::class, 'destroy'])->name('properties.destroy')->middleware([HandlePrecognitiveRequests::class]);
 
 // Arquivos
-Route::delete('/imoveis/delete{id}', [PropertiesController::class, 'destroyFile'])->name('files.destroy')->middleware([HandlePrecognitiveRequests::class]);
+Route::delete('/arquivos/delete/{id}', [PropertiesController::class, 'destroyFile'])->name('files.destroy')->middleware([HandlePrecognitiveRequests::class]);
 Route::post('/imoveis/{ins_municipal}/upload', [PropertiesController::class, 'uploadFile'])->name('files.upload')->middleware([HandlePrecognitiveRequests::class]);
-Route::get('/imoveis/download-{id}', [PropertiesController::class, 'downloadFile'])->name('files.download');
+//Route::get('/arquivos/download/{id}', [PropertiesController::class, 'downloadFile'])->name('files.download');
 
 // Usuários
 Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');

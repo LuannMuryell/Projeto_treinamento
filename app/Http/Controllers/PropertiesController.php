@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class PropertiesController extends Controller
 {
     public function index(){
-        $properties = Property::with('contribuinte')->paginate(8);
+        $properties = Property::with('contribuinte')->paginate(10);
         return Inertia::render('Properties/Properties', ['properties' => $properties]);
     }
 
@@ -116,14 +116,18 @@ class PropertiesController extends Controller
     }
 
     public function destroyFile(string $id) 
-    {
-        File::destroy($id);
-    }
-
-    public function downloadFile(string $id){
+    {  
         $file = File::find($id);
-        return Storage::download($file->file_path, $file->file_name);
+
+        Storage::disk('public')->delete($file->file_path); 
+
+        $file->delete();
     }
 
+    /*public function downloadFile(File $file)
+    {
+    
+    return response()->download(Storage::disk('public')->path($file->file_path), $file->file_name);
+    }*/
 }
 

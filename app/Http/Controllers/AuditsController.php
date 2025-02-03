@@ -15,7 +15,7 @@ class AuditsController extends Controller
             return redirect()->route('home');
         }
 
-        $audits = Audit::with('user')->latest()->paginate(8);
+        $audits = Audit::with('user')->latest()->paginate(10);
 
         return Inertia::render('Audits/Audits', ['audits' => $audits]);
     }

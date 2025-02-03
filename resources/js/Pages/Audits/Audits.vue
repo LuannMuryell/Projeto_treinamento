@@ -37,8 +37,8 @@
                                 <td class="py-2 px-4 text-center">{{ audit.id }}</td>
                                 <td class="py-2 px-4 text-center">{{ audit.user ? audit.user.name : 'Desconhecido' }}</td>
                                 <td class="py-2 px-4 text-center">{{ viewEvent(audit.event) }}</td>
-                                <td class="py-2 px-4 text-center">{{ new Date(audit.created_at).toLocaleString() }}</td>
-                                <td class="py-2 px-4 text-center">{{ viewAuditable_type(audit.auditable_type.split('\\').pop()) }}</td>
+                                <td class="py-2 px-4 text-center">{{ formatDateTime(audit.created_at) }}</td>
+                                <td class="py-2 px-4 text-center">{{ viewTable(audit.auditable_type) }}</td>
                                 <td class="py-2 px-4 text-center">{{ audit.auditable_id }}</td>
                                 <td class="py-2 me-2 text-center">
                                     
@@ -59,8 +59,8 @@
                     prev-icon="mdi-menu-left"/>
             </v-container>
         </v-main>
-        <v-dialog v-model="dialog" width="auto">
-            <v-card max-width="800">
+        <v-dialog v-model="dialog" max-width="600">
+            <v-card>
                 <v-card-title class="text-center text-h5 pa-4">
                     <v-icon left size="24" class="me-1" style="margin-top: -3px">mdi-information-outline</v-icon>
                     Detalhes da Auditoria</v-card-title>
@@ -79,7 +79,7 @@
                             <v-list-item-title><strong>Evento:</strong> {{ viewEvent(selectedAudit.event) }}</v-list-item-title>
                         </v-list-item>
                         <v-list-item>
-                            <v-list-item-title><strong>Tabela:</strong> {{ viewAuditable_type(selectedAudit.auditable_type.split('\\').pop()) }}</v-list-item-title>
+                            <v-list-item-title><strong>Tabela:</strong> {{ viewTable(selectedAudit.auditable_type) }}</v-list-item-title>
                         </v-list-item>
                         <v-list-item>
                             <v-list-item-title><strong>ID Auditado:</strong> {{ selectedAudit.auditable_id }}</v-list-item-title>
@@ -167,25 +167,24 @@ const viewEvent = (event) => {
         return 'Alteração'
     }else if(event === 'created'){
         return 'Criação'
-    }else {
+    }else if(event === 'deleted'){
         return 'Exclusão'
     }
 }
 
-const viewAuditable_type = (auditable_type) => {
-    if (auditable_type == 'Person') {
-        return 'Pessoas'
-    } else if(auditable_type == 'Property') {
-        return 'Imóveis'
-    } else if(auditable_type == 'User') {
-        return 'Usuários'
-    } else if(auditable_type == 'File') {
+const viewTable = (auditable_type) => {
+    if (auditable_type === 'App\\Models\\File'){
         return 'Arquivos'
-    } else {
+    }else if(auditable_type === 'App\\Models\\Property'){
+        return 'Imóveis'
+    }else if(auditable_type === 'App\\Models\\Person'){
+        return 'Pessoas'
+    }else if(auditable_type === 'App\\Models\\User'){
+        return 'Usuários'
+    }else{
         return 'Averbações'
     }
 }
-
 
 // Paginação
 
@@ -200,15 +199,15 @@ const fetchPage = (page) => {
 const search = ref("");
 
 const filteredAudits = computed(() => {
-  return props.audits.data.filter((audit) => {
-    const searchTerm = search.value.toLowerCase();
-    const formattedDate = new Date(audit.created_at).toLocaleString().toLowerCase();
-    return (
-      audit.user.name.toLowerCase().includes(searchTerm) ||
-      audit.event.toLowerCase().includes(searchTerm) ||
-      formattedDate.includes(searchTerm) ||
-      audit.auditable_type.toLowerCase().includes(searchTerm)
-    )
-  })
+    return props.audits.data.filter((audit) => {
+        const searchTerm = search.value.toLowerCase();
+        return (
+            audit.user.name.toLowerCase().includes(searchTerm) ||
+            audit.event.toLowerCase().includes(searchTerm) ||
+            viewEvent(audit.event).toLowerCase().includes(searchTerm) ||
+            formatDateTime(audit.created_at).includes(searchTerm) ||
+            viewTable(audit.auditable_type).toLowerCase().includes(searchTerm)
+        )
+    })
 })
 </script>
